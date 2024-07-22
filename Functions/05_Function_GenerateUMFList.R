@@ -1,6 +1,9 @@
 # Function for creating UMF data bundles for both abundnace and occupancy models
 
-GenerateUMFList <- function(species, type, w, dur, caps, meta, meta.sf.buffer, standardise = F){
+# This version only takes into account landscapes were speceis were detected - 
+# there is NO CONSIDERATION OF SPATIAL RANGE IN THIS VERSION
+
+GenerateUMFList <- function(species, type, w, dur, caps, meta, standardise = F){
   
   ## I am using a 100 day duration b/c that's what I used in the co-abundance MS
   
@@ -14,49 +17,11 @@ GenerateUMFList <- function(species, type, w, dur, caps, meta, meta.sf.buffer, s
     
     ### Specify which survey the species has been detected (at least once!)  
     ## Don't use landscape b/c it could introduce too many zeros for unmarked 
-    
-    # Previously we were only considering landscape where we saw a detection.
-    # now, we will use iUCN ranges and an IB distribution (informed bernoulli)
-    
-    # import the relevant IUCN
-    path = paste0("/Users/sassen/Dropbox/Original_IUCN_ranges/", sub(" ", "_", sp), ".shp")
-    
-    # make sure we remove clear extinct ranges
-    shp = read_sf(path) 
-    
-    if ("legend" %in% colnames(shp)) {
-      colnames(shp)[colnames(shp) == "legend"] <- "LEGEND"
-    }
-    
-    # Remove extinct ranges
-    shp <- shp[shp$LEGEND != 'Extinct',]
-    
-    # sf_use_s2(F)
-    
-    # Qucik module to include only extant ranges
-    
-    print('Cross-checking IUCN range')
-    
-    # if in IUCN OR species is detected, keep, if else delete 
-    IUCN.ind <- st_intersects(meta.sf.buffer$geometry, st_union(shp), sparse = F)
-    
-    # Which surveys correspond to that iUCN range
-    IUCN.survs <- unique(meta$survey_id[IUCN.ind])
-    
-    # then we want to keep the landscapes, not just the survey.
-    # The landscape portion that was not surveyed in the current survey
-    # could have been done in a different survey.
-    survs <- unique(caps$survey_id[caps$Species == sp | caps$survey_id %in% IUCN.survs])
-    
-    # Now we need to get that to the landscape level
-    landscapes.filtered <- unique(meta$Landscape[meta$survey_id %in% survs])
-    
-    # now make sure we take alllll those surveys from those landscapes 
-    final_survs <- unique(meta$survey_id[meta$Landscape %in% landscapes.filtered])
+    survs = unique(caps$survey_id[caps$Species == sp])
     
     ## Select relevant surveys
-    c = caps[caps$survey_id %in% final_survs,] #subset captures
-    m = as.data.frame(meta[meta$survey_id %in% final_survs,]) #subset metadata
+    c = caps[caps$survey_id %in% survs,] #subset captures
+    m = as.data.frame(meta[meta$survey_id %in% survs,]) #subset metadata
     
     if(standardise){
       ## standardize site covariates to ensure variables are comparable across models later
@@ -145,7 +110,7 @@ GenerateUMFList <- function(species, type, w, dur, caps, meta, meta.sf.buffer, s
     #
     
     
-    ## If all sampling units are active for less than 100 days, use the maximum sequence length for a instead
+    ## If all sampling units are active for less than 200 days, use the maximum sequence length for a instead
     if(max(c$seq) < dur){dur = max(c$seq)}
     
     # WE ARE ROUNDING HERE, SHOULD IT BE CEILING INSTEAD?
@@ -165,14 +130,28 @@ GenerateUMFList <- function(species, type, w, dur, caps, meta, meta.sf.buffer, s
         # Select a single start date
         l<-starts[p]
         
+        ## by pass to limit matricies going out of bounds
+        if(max(l:(l+w)) > dur){
+          
+          # create a new sequence that terminates at dur
+          seq = l:(l+w)
+          seq = seq[seq < dur]
+          
+        }else{
+          
+          #if its fine, save the name seq
+          seq = l:(l+w)
+          
+        } # end out of bounds conditional 
+        
         
         if(type == "abundance"){
           
           # Make if-else statement 
-          ifelse(all(mat[u,c(l:(l+(w-1)))]== "NA", na.rm=FALSE) == "TRUE", 
+          ifelse(all(mat[u,seq]== "NA", na.rm=FALSE) == "TRUE", 
                  #if all values in matrix @ row u across the sampling occasion window are all NA,
                  dh.mat[u,p]<-NA, # then leave the sampling occasion as NA,
-                 dh.mat[u,p]<- sum(as.numeric(mat[u,c(l:(l+(w-1)))]), na.rm = TRUE)) 
+                 dh.mat[u,p]<- sum(as.numeric(mat[u,seq]), na.rm = TRUE)) 
           # But if FALSE, take the the sum of the detections
           
         } # End conditional for abundance
@@ -180,10 +159,10 @@ GenerateUMFList <- function(species, type, w, dur, caps, meta, meta.sf.buffer, s
         if(type == "occu"){
           
           # Make if-else statement 
-          ifelse(all(mat[u,c(l:(l+(w-1)))]== "NA", na.rm=FALSE) == "TRUE", 
+          ifelse(all(mat[u,seq]== "NA", na.rm=FALSE) == "TRUE", 
                  #if all values in matrix @ row u across the sampling occasion window are all NA,
                  dh.mat[u,p] <- NA, # then leave the sampling occasion as NA,
-                 dh.mat[u,p] <- max(as.numeric(mat[u,c(l:(l+(w-1)))]), na.rm = TRUE))
+                 dh.mat[u,p] <- max(as.numeric(mat[u,seq]), na.rm = TRUE))
           # But if FALSE, take the the maximum value (either zero or one)
           
         } # End conditional for occupancy
@@ -294,4 +273,3 @@ GenerateUMFList <- function(species, type, w, dur, caps, meta, meta.sf.buffer, s
   
   return(umf.list)
 }
-

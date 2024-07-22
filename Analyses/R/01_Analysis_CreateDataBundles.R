@@ -38,9 +38,9 @@ dPathsCaps <- list.files("/Users/sassen/Dropbox/CT Capture Histories Database/As
 # Import ECL sites only (10 sites in SEA)
 #dPaths <- dPaths[(grepl("Luskin", dPaths) | grepl("Moore", dPaths)) & !grepl("29_Danum_Valley", dPaths) & !grepl("31_Danum_Valley", dPaths) ]  # These 2 surveys have issues - Sarawak (Brodie has an overlap problem with another survey)
 
-# Import the 'Big Momma' dataset containing sites from co-authors (~44 landscapes)
-dPathsMeta <- dPathsMeta[!grepl("29_Danum_Valley", dPathsMeta) & !grepl("31_Danum_Valley", dPathsMeta) & !grepl("Ulu_Trusan_2012_Brodie", dPathsMeta)] # Exclude these 2 surveys due to an issue with their camera's
-dPathsCaps <- dPathsCaps[!grepl("29_Danum_Valley", dPathsCaps) & !grepl("31_Danum_Valley", dPathsCaps) & !grepl("Ulu_Trusan_2012_Brodie", dPathsCaps)] # Exclude these 2 surveys due to an issue with their camera's
+# Import the 'ECL' dataset (10 landscapes)
+dPathsMeta <- dPathsMeta[(grepl("Luskin", dPathsMeta) | (grepl("Moore", dPathsMeta) & grepl("Ulu_Muda_FR", dPathsMeta))) & !grepl("29_Danum_Valley", dPathsMeta) & !grepl("31_Danum_Valley", dPathsMeta) & !grepl("Ulu_Trusan_2012_Brodie", dPathsMeta)] # Exclude these 2 surveys due to an issue with their camera's
+dPathsCaps <- dPathsCaps[(grepl("Luskin", dPathsCaps) | (grepl("Moore", dPathsCaps) & grepl("Ulu_Muda_FR", dPathsCaps))) & !grepl("29_Danum_Valley", dPathsCaps) & !grepl("31_Danum_Valley", dPathsCaps) & !grepl("Ulu_Trusan_2012_Brodie", dPathsCaps)] # Exclude these 2 surveys due to an issue with their camera's
 
 
 # Loop through paths to import and cleanse data using our custom function
@@ -162,25 +162,21 @@ sf_use_s2(T)
 meta.sf.buffer <- st_buffer(meta.sf, dist = set_units(10, 'km'))
 sf_use_s2(F)
 
-## 04b. Generate the UMF list for occupancy 
-
-# This function will create 'IUCN-aware UMF lists.
-umf.list.occu <- GenerateUMFList(species = sp.input, 
+## 04b. Generate the UMF list for Occupancy 
+umf.list.occu <- GenerateUMFList(species = sp.input[4], 
                             type = 'occu',
                             w = 5,
                             dur = 100,
                             caps = caps,
-                            meta = meta,
-                            meta.sf = meta.sf)
+                            meta = meta)
 
 ## 04c. Generate the UMF list for Abundance
-umf.list.abu <- GenerateUMFList(species = sp.input, 
+umf.list.abu <- GenerateUMFList(species = sp.input[4], 
                             type = 'abundance',
                             w = 5,
                             dur = 100,
                             caps = caps,
-                            meta = meta,
-                            meta.sf = meta.sf)
+                            meta = meta)
 
 # Save the UMF lists so we can move them to the HPC
 saveRDS(umf.list.occu, "Outputs/UMF.List/umflistocc.rds")
@@ -189,15 +185,4 @@ saveRDS(umf.list.abu, "Outputs/UMF.List/umflistabu.rds")
 rm(sp.input)
 
 #### End of Analysis ####
-
-
-
-
-
-
-
-
-
-
-
 
