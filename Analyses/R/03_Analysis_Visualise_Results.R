@@ -14,3 +14,14 @@
 
 
 #### Source Functions
+
+
+
+#### Produce the plots
+
+# take the differences of all species nonlinear wrt to their linears
+
+saveRDS((read.csv("/Users/sassen/Desktop/resultframe.csv")[-1]), 'inputs/full_model_summary.rds')
+
+
+

@@ -21,6 +21,7 @@ library(sf)
 library(gratia)
 library(scales)
 library(units)
+library(abind)
 
 #### Source Functions
 sapply(list.files("./Functions", pattern="\\.R", full.names=TRUE), 
@@ -163,7 +164,7 @@ meta.sf.buffer <- st_buffer(meta.sf, dist = set_units(10, 'km'))
 sf_use_s2(F)
 
 ## 04b. Generate the UMF list for Occupancy 
-umf.list.occu <- GenerateUMFList(species = sp.input[4], 
+umf.list.occu <- GenerateUMFList(species = sp.input, 
                             type = 'occu',
                             w = 5,
                             dur = 100,
@@ -171,7 +172,7 @@ umf.list.occu <- GenerateUMFList(species = sp.input[4],
                             meta = meta)
 
 ## 04c. Generate the UMF list for Abundance
-umf.list.abu <- GenerateUMFList(species = sp.input[4], 
+umf.list.abu <- GenerateUMFList(species = sp.input, 
                             type = 'abundance',
                             w = 5,
                             dur = 100,
@@ -185,4 +186,5 @@ saveRDS(umf.list.abu, "Outputs/UMF.List/umflistabu.rds")
 rm(sp.input)
 
 #### End of Analysis ####
+
 
