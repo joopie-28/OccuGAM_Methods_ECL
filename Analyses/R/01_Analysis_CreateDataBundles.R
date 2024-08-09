@@ -22,6 +22,7 @@ library(gratia)
 library(scales)
 library(units)
 library(abind)
+library(AICcmodavg)
 
 #### Source Functions
 sapply(list.files("./Functions", pattern="\\.R", full.names=TRUE), 

@@ -205,7 +205,7 @@ fitoccuGAM.HPC <- function(sp.list, covariate){
                            n.chains = nc, n.adapt = na, n.iter=ni,parallel = T, 
                            n.thin=nt, n.burnin = nb, parameters.to.save = c('b', 'rho', 'a0', 'aEffort', 'bLandscape', 'var.bLandscape','bYear',
                                                                             'SSEobs', 'SSEsim', 'p.val'),
-                           model.file = "Analyses/Models/02_Models_OccuGAM_vECL.R")
+                           model.file = "code/01HPC_Models_OccuGAM_vECL.R")
   
   jagsmod_samples <- temp.mod$samples 
   
@@ -395,7 +395,7 @@ SpCovDF <- read.csv("data/SpCovDF.csv")
 sp <- SpCovDF[slurm, 'species']
 covariate <- SpCovDF[slurm, 'covariate']
 
-# read in umf.list### FIXXXXXXXXX
+# read in umf.list
 umf.list.occu <- readRDS("data/umflistocc.rds")
 
 # Thin the UMF list based on chosen combination

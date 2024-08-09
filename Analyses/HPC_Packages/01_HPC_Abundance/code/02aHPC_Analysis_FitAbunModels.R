@@ -195,7 +195,7 @@ fitabuGAM.HPC <- function(sp.list, covariate){
                            n.chains = nc, n.adapt = na, n.iter=ni, parallel = T, 
                            n.thin=nt, n.burnin = nb, parameters.to.save = c('b', 'rho', 'a0', 'aEffort', 'bLandscape', 'var.bLandscape','bYear',
                                                                             'SSEobs', 'SSEsim', 'p.val'),
-                           model.file = "Analyses/Models/01_Models_AbuGAM_vECL.R")
+                           model.file = "code/01HPC_Models_AbuGAM_vECL.R")
   
   jagsmod_samples <- temp.mod$samples 
   
@@ -381,7 +381,7 @@ SpCovDF <- read.csv("data/SpCovDF.csv")
 sp <- SpCovDF[slurm, 'species']
 covariate <- SpCovDF[slurm, 'covariate']
 
-# read in umf.liSt ###FIXXXXXXXXX
+# read in umf.liSt 
 umf.list.abu <- readRDS("data/umflistabu.rds")
 
 # Thin the UMF list based on chosen combination
@@ -468,171 +468,6 @@ saveRDS(mod.extract, pathname.D)
 
 
 
-
-
-
-
-mod <- fitabuGAM.HPC(umf.list.abu[7], 'Avg_OP_percent_3km')
-
-
-# Relevant extractions
-DrawPosteriorJAGS.ABU <- function(JAGS_model, sp.list, covariate){
-  
-  # Extract EDF and species name from the model output, and the vanilla unmarked model
-  EDF <- JAGS_model$EDF
-  species <- JAGS_model$Species
-  
-  
-  # extract the relevant covariate (jags models do not store these
-  # so we refer back to our umf lists)
-  cov <- sp.list[[species]]@siteCovs[[covariate]]
-  cov[is.na(cov)] <- min(cov, na.rm=T) # need to make sure we re-account for NAs as not carried over from model fitting.
-  
-  #mcmc extraction process
-  mod_mcmc <- do.call('rbind', JAGS_model$Full_model$samples)
-  
-  # which landscape has lowest SD?
-  # ranefs <- which(grepl("bLandscape",names(JAGS_model$Full_model$summary[,2])))
-  # ranefs <- ranefs[-length(ranefs)]
-  # n.min.ranef <- which.min(JAGS_model$Full_model$summary[ranefs,'sd'])
-  # n.min.df <- ranefs[n.min.ranef]
-  
-  # Get Model predictions from the MCMC output
-  
-  tmp_est <- exp((JAGS_model$Data_List$X %*% t(mod_mcmc[,1:5]))) 
-  
-  
-  # Make sure we get the full intervals
-  tmp_est_df <- as.data.frame(t(apply(tmp_est, 1, 
-                                      quantile, 
-                                      probs = c(0.055,0.5,0.945))))
-  
-  # Add in our smooth covariate
-  tmp_est_df$cov <- cov
-  
-  # Order if we want to do plotting later
-  tmp_est_df<-tmp_est_df[order(tmp_est_df$cov),]
-  
-  
-  
-  # Plot some posterior curves, WE ARE NOT DRWING ANYMORE JUST DO ALL!!!!
-  randoms <- seq(1, ncol(tmp_est))
-  
-  # An empty dataframe for our draws
-  pos.draws <- data.frame(matrix(NA, nrow = nrow(tmp_est_df),
-                                 ncol = length(randoms)))
-  
-  # Populate the dataframe with n draws from the model
-  for(i in 1:length(randoms)){
-    
-    tmp.curve <- (JAGS_model$Data_List$X %*% mod_mcmc[randoms[i],1:5])
-    pos.draws[,i] <- tmp.curve
-  }
-  
-  # add the covariate back in and order dataframe
-  pos.draws$cov <- cov
-  pos.draws <- pos.draws[order(pos.draws$cov),]
-  
-  # Skip derivative calculation if linear
-  if(EDF <=2){
-    return(list('Draws' = list('Quantiles'=tmp_est_df),
-                'EDF' = EDF,
-                'Species' = species))
-  }
-  
-  # Now save those selected draws, we will use them to calculate derivatives and store them
-  
-  # instnatiate new dataframe for first and second derivatives
-  
-  d2.df <- data.frame(matrix(NA, nrow = nrow(pos.draws),
-                             ncol = length(randoms)))
-  
-  for (col in 1:(ncol(d2.df))){
-    
-    gam.temp <- mgcv::gam(pos.draws[,col]~s(cov, k=-1,bs = 'tp'), data = pos.draws, method ='REML')
-    
-    # Isolate our preditors for derivative functions (slightly touchy functions)
-    newdat =  data.frame('cov'= pos.draws$cov)
-    
-    # Calculate 1st order derivative
-    d2.df[,col] <- derivatives(gam.temp, order = 2, data = newdat,
-                               eps=0.00001)[[4]]
-    
-    
-  }
-  
-  # Add covariate in
-  d2.df$cov <- newdat$cov
-  
-  # Module for extracting Bayesian CIs for each derivative
-  deriv.2 <- d2.df[-ncol(d2.df)]
-  
-  # Line up values and calculate quantiles
-  deriv.2.quantiles <- as.data.frame(t(apply(deriv.2, 1, 
-                                             quantile, 
-                                             probs = c(0.055,0.5,0.945))))
-  
-  # add the covariate back in
-  deriv.2.quantiles$cov <- d2.df$cov
-  
-  # Run the final GAM for the meidan derivative
-  gam.mean <- mgcv::gam(tmp_est_df[,2]~ s(cov, k=-1,bs = 'tp'), 
-                        data = tmp_est_df, method ='REML')
-  
-  # Isolate our preditcors for derivative functions (slightly toughy functions)
-  newdat =  data.frame('cov'= tmp_est_df$cov)
-  
-  # Calculate 2nd order derivative
-  d2.mean <- derivatives(gam.mean, order = 2, data = newdat,
-                         eps=0.00001)[c(4,9)]
-  # Calculate 1st order derivative
-  d1.mean <- derivatives(gam.mean, order = 1, data = newdat,
-                         eps=0.00001)[c(4,9)]
-  
-  # bundle up
-  output <- list('Draws' = list('Quantiles'=tmp_est_df),
-                 'Derivatives' = list('First' = list('Median' = d1.mean),
-                                      'Second' =list('Median' = d2.mean, 
-                                                     'Quantiles' = deriv.2.quantiles)),
-                 'EDF' = EDF,
-                 'Species' = species)
-  return(output)
-  
-}
-test<-DrawPosteriorJAGS.ABU.HPC(mod,umf.list.abu[7], covariate = 'Avg_OP_percent_3km')
-
-plot((test$Draws$Quantiles$`50%`)~test$Draws$Quantiles$cov, type='l', ylim =c(0,5))
-polygon(c(test$Draws$Quantiles$cov, rev(test$Draws$Quantiles$cov)), 
-        c(test$Draws$Quantiles$`97.5%`, rev(test$Draws$Quantiles$`2.5%`)), border=NA, col=alpha('lightgrey',0.2))
-
-# get the N's as well
-mod_mcmc <- do.call('rbind', jagsmod_samples)
-range(meta$Avg_forest_cover_3km)
-
-
-lambda.N <- as.data.frame(t(apply(mod_mcmc[,1:399], 2, 
-                      quantile, 
-                      probs = c(0.055,0.5,0.945))))
-
-points((lambda.N$`50%`)~test$Draws$Quantiles$cov)
-
-test.mod <- pcount(~num_cams_active_at_date~Avg_OP_percent_3km+ (1|Landscape), data = umf.list.abu$`Prionailurus bengalensis`)
-
-pred <- predict(test.mod, type='state', re.form=NA)
-cov.pred <- umf.list.abu$`Prionailurus bengalensis`@siteCovs$Avg_OP_percent_3km
-
-points((pred$Predicted)~cov.pred, type = 'p', ylim = c(0,2500),pch=19, add=T)
-points((pred$lower)~cov.pred, type = 'p', col='black', add=T)
-points((pred$upper)~cov.pred, type = 'p', col='black', add=T)
-
-
-
-
-#------
-
-plot(exp(mod.extract$Draws$Quantiles$`50%`)~mod.extract$Draws$Quantiles$cov, type='l')
-polygon(c(mod.extract$Draws$Quantiles$cov, rev(mod.extract$Draws$Quantiles$cov)), 
-        c(mod.extract$Draws$Quantiles$`94.5%`, rev(mod.extract$Draws$Quantiles$`5.5%`)), border=NA, col=alpha('lightgrey',0.2))
 
 
 
