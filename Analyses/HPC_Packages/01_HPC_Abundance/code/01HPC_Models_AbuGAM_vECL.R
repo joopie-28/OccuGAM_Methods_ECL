@@ -39,14 +39,23 @@ model {
       y[i,j] ~ dbin(det_prob[i,j], N[i])
       
       #### Derived Parameters
-      #Bayes P-Value
+      
+      # Log likelihood for WAIC 
+      log_lik0[i, j] <- logdensity.bin(y[i, j], det_prob[i,j], N[i])
+      
+      # Bayes P-Value
       
       Presi[i,j] <- (y[i,j] - det_prob[i,j])^2       # Calculate the squared residual error of the observed data 
       y.new[i,j] ~ dbin(det_prob[i,j], N[i])              # Simulate observed data 
       Presi.new[i,j] <- (y.new[i,j] - det_prob[i,j])^2  # Calculate squared residual error of simulated data 
       
     }
+    
+    #### get the row log-likelihood
+    log_lik[i] <- sum(log_lik0[i,])
+    
   }
+  
   
   SSEobs <- sum(Presi[,])     # Calculate the sum of squared residual errors for observed data
   SSEsim <- sum(Presi.new[,]) # Calculate the sum of squared residual error for the simulated data

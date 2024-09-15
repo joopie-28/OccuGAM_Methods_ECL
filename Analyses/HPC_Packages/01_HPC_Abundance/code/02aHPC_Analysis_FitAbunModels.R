@@ -194,11 +194,19 @@ fitabuGAM.HPC <- function(sp.list, covariate){
   temp.mod <- jagsUI::jags(data = data_list, inits = my_inits.val,
                            n.chains = nc, n.adapt = na, n.iter=ni, parallel = T, 
                            n.thin=nt, n.burnin = nb, parameters.to.save = c('b', 'rho', 'a0', 'aEffort', 'bLandscape', 'var.bLandscape','bYear',
-                                                                            'SSEobs', 'SSEsim', 'p.val'),
+                                                                            'SSEobs', 'SSEsim', 'p.val', 'log_lik'),
                            model.file = "code/01HPC_Models_AbuGAM_vECL.R")
   
   jagsmod_samples <- temp.mod$samples 
   
+  # Calculate LOOs
+  mcmcMat = as.matrix(jagsmod_samples,chains=TRUE)
+  mcmc_loglik = mcmcMat[,grep("^log_lik",colnames(mcmcMat))]
+  WAIC<-loo::waic(mcmc_loglik)
+  LOO<-loo::loo(mcmc_loglik)
+  
+  # Compute LOO using the loo package
+  #loo_result <- loo(log_lik_matrix)
   
   # Calculate EDF using our custom function, which is essentially equivalent to type 0
   # EDF from S. Woods 'Sim2jam' function
@@ -215,7 +223,9 @@ fitabuGAM.HPC <- function(sp.list, covariate){
                         'EDF' = edf,
                         'Species' = sp,
                         'Data_List' = data_list,
-                        'Full_model' = temp.mod)
+                        'Full_model' = temp.mod,
+                        'WAIC' = WAIC,
+                        'LOO' =LOO)
   
 }
 
@@ -458,6 +468,10 @@ saveRDS(threshold_mod_summary, paste0('results/ABUGAM_RDS/', covariate ,"/", mod
 pathname.D <- paste0("results/PLOTTING_RDS/",covariate,"/", modname, ".rds")
 
 saveRDS(mod.extract, pathname.D)
+
+# We are also going to save the models, we only run 10 anyways
+pathname.E <- paste0("results/FULL_MODELS/", modname, ".rds")
+saveRDS(mod, pathname.E)
 
 # End of Abu HPC Script
 

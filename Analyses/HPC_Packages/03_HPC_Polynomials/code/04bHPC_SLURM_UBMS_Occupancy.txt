@@ -10,8 +10,8 @@
 # Select 1 task per node (b/c R is not MPI)
 #SBATCH --ntasks=1
 
-# Select 4 CPUS per node (one per MCMC chain)
-#SBATCH --cpus-per-task=4
+# Select 1 CPUS per node (not running any MCMC or para)
+#SBATCH --cpus-per-task=1
 
 # Select 50000 MB (50 GB) of memory per node 
 #SBATCH --mem=50000
@@ -26,11 +26,11 @@
 #SBATCH --array=1-10
 
 # SPECIFY THE JOB NAME
-#SBATCH --job-name=OCCUGAM_MIDDLE
+#SBATCH --job-name=UBMS_Occupancy
 
 # SPECIFY .err AND .out FILE LOCATIONS
-#SBATCH --output=/home/s4633921/01_HPC_Occupancy/results/OCCUGAM/slurm-%A_%a.out
-#SBATCH --error=/home/s4633921/01_HPC_Occupancy/results/ERRORS/slurm-%A_%a.err
+#SBATCH --output=/home/s4633921/03_HPC_Polynomials/results/HPC_OUTPUT/slurm-%A_%a.out
+#SBATCH --error=/home/s4633921/03_HPC_Polynomials/results/ERRORS/slurm-%A_%a.err
 
 # LOAD THE RELEVANT MODULE
 module load rjags/4-10-foss-2021a-r-4.1.0 
@@ -39,12 +39,9 @@ if [ $? -ne 0 ]; then
   exit 3
 fi
 
-# SET THE 'setting' VARIABLE THAT WILL BE LOADED IN R
-export SETTING="MIDDLE" 
-
 # SPECIFY THE PBS WORKING DIRECTORY AND PRINT TO VERIFY
 cd $SLURM_SUBMIT_DIR
 pwd
 
 # LOAD THE R SCRIPT, SUBMIT JOB AND SPECIFY THE ARRAY INDEX 
-Rscript /home/s4633921/01_HPC_Occupancy/code/02bHPC_Analysis_FitOccuModels.R $SLURM_ARRAY_TASK_ID
+Rscript /home/s4633921/03_HPC_Polynomials/code/03bHPC_FitPolynomialOccuModels.R $SLURM_ARRAY_TASK_ID

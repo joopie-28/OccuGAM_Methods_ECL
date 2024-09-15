@@ -178,7 +178,23 @@ dev.off()
 
 
 
+#########################
 
+# Use function 9 to fit the UBMS model and choose the right ones.
+# JAGS Models come from the HPC and are imported using function 9
+# Still need to compute AUC or something, but at least we gave GOF using LOO 
+
+# import a mod 
+
+temp.mod <- readRDS("/Users/sassen/Desktop/01_HPC_Abundance/results/FULL_MODELS/Macaca_nemestrina_Avg_FLLI_3km_2024-09-12_JMS.rds")
+temp.mod$WAIC
+temp.mod$LOO
+
+models$Linear@loo
+
+
+test@submodels@submodels$state@type
+summary(test)
 
 
 
