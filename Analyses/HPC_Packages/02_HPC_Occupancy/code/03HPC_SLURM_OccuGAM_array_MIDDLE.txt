@@ -29,8 +29,8 @@
 #SBATCH --job-name=OCCUGAM_MIDDLE
 
 # SPECIFY .err AND .out FILE LOCATIONS
-#SBATCH --output=/home/s4633921/01_HPC_Occupancy/results/OCCUGAM/slurm-%A_%a.out
-#SBATCH --error=/home/s4633921/01_HPC_Occupancy/results/ERRORS/slurm-%A_%a.err
+#SBATCH --output=/home/s4633921/02_HPC_Occupancy/results/OCCUGAM/slurm-%A_%a.out
+#SBATCH --error=/home/s4633921/02_HPC_Occupancy/results/ERRORS/slurm-%A_%a.err
 
 # LOAD THE RELEVANT MODULE
 module load rjags/4-10-foss-2021a-r-4.1.0 
@@ -47,4 +47,4 @@ cd $SLURM_SUBMIT_DIR
 pwd
 
 # LOAD THE R SCRIPT, SUBMIT JOB AND SPECIFY THE ARRAY INDEX 
-Rscript /home/s4633921/01_HPC_Occupancy/code/02bHPC_Analysis_FitOccuModels.R $SLURM_ARRAY_TASK_ID
+Rscript /home/s4633921/02_HPC_Occupancy/code/02bHPC_Analysis_FitOccuModels.R $SLURM_ARRAY_TASK_ID

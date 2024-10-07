@@ -20,7 +20,7 @@
 #SBATCH --partition=general
 
 # Select 12 hours (h:m:s format) of walltime for small mods
-#SBATCH --time=24:00:00
+#SBATCH --time=48:00:00
 
 # SPECIFY THE JOB ARRAY-
 #SBATCH --array=1-10

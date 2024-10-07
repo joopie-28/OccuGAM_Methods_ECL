@@ -57,14 +57,12 @@ for (name in names(formulae)) {
 ### Save the models in the HPC environment
 
 # Create a useful naming scheme
-modname <- date.wrap(gsub(" ","_",paste0(sp,"_Poly_", covariate)))
+modname <- date.wrap(gsub(" ","_",paste0(sp,"_Poly_", cov)))
 
 pathname <- paste0('results/Abundance/', modname, ".rds")
 
 # Save it on the HPC environment
 saveRDS(abu.models, pathname)
-
-
 
 
 
