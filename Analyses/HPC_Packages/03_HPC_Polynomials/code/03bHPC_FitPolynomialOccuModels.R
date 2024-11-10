@@ -29,12 +29,13 @@ SpCovDF <- read.csv("data/SpCovDF.csv")
 # Select the relevant species-covariate pair for this task
 sp <- SpCovDF[slurm, 'species']
 cov <- SpCovDF[slurm, 'covariate']
+poly <- SpCovDF[slurm, 'poly']
 
 # read in umf.list
 umf.list.occu <- readRDS("data/umflistocc.rds")
 
 # Fit and plot the polynomial model versions using unmarked with increasing polynomial terms of the covariate
-occu.models <- list()
+
 formulae <- list(
   "Linear" = as.formula(paste("~ num_cams_active_at_date ~", cov,"+ (1|Landscape) + (1|Year)")),
   "Quadratic" = as.formula(paste("~ num_cams_active_at_date ~ poly(", cov, ", 2, raw = TRUE) + (1|Landscape) + (1|Year)")),
@@ -45,23 +46,25 @@ formulae <- list(
 
 umf.list.occu[[sp]]@siteCovs$Year <- as.numeric(as.factor(stringr::str_extract(umf.list.occu[[sp]]@siteCovs[['survey_id']], 
                                                                                stringr::regex("(\\d+)(?!.*\\d)"))))
-# Occupancy models
-for (name in names(formulae)) {
-  print(paste0('Fitting frequentist models, currently on the ', name, ' model'))
-  
-  # Save models in the list and export later
-  occu.models[[name]] <- ubms::stan_occu(formulae[[name]], data = umf.list.occu[[sp]])
-}
+
+# select the correct polynomial formula
+
+current.form <- formulae[[poly]]
+
+# Occupancy models using UBMS
+# Save models in the list and export later
+occu.model <- ubms::stan_occu(current.form, data = umf.list.occu[[sp]])
+
 
 ### Save the models in the HPC environment
 
 # Create a useful naming scheme
-modname <- date.wrap(gsub(" ","_",paste0(sp,"_Poly_", cov)))
+modname <- date.wrap(gsub(" ","_",paste0(sp,"_Poly_", cov, "_", poly)))
 
 pathname <- paste0('results/Occupancy/', modname, ".rds")
 
 # Save it on the HPC environment
-saveRDS(occu.models, pathname)
+saveRDS(occu.model, pathname)
 
 
 

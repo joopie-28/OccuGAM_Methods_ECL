@@ -44,13 +44,18 @@ model {
       Presi[i,j] <- (y[i,j] - det_prob[i,j])^2       # Calculate the squared residual error of the observed data 
       y.new[i,j] ~ dbin(det_prob[i,j], N[i])              # Simulate observed data 
       Presi.new[i,j] <- (y.new[i,j] - det_prob[i,j])^2  # Calculate squared residual error of simulated data 
-      
+     
+       # Log likelihood for WAIC 
+      log_lik0[i, j] <- logdensity.bin(y[i, j], det_prob[i,j], N[i])
     }
+    #### get the row log-likelihood
+    log_lik[i] <- sum(log_lik0[i,])
   }
   
   SSEobs <- sum(Presi[,])     # Calculate the sum of squared residual errors for observed data
   SSEsim <- sum(Presi.new[,]) # Calculate the sum of squared residual error for the simulated data
   p.val <- step(SSEsim - SSEobs)
+  c.hat <- SSEsim / SSEobs
   
   # the detection process priors
   a0 ~ dnorm(0,0.75)

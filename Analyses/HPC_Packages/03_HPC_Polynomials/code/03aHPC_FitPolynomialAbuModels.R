@@ -31,12 +31,13 @@ SpCovDF <- read.csv("data/SpCovDF.csv")
 # Select the relevant species-covariate pair for this task
 sp <- SpCovDF[slurm, 'species']
 cov <- SpCovDF[slurm, 'covariate']
+poly <- SpCovDF[slurm, 'poly']
 
 # read in umf.list 
 umf.list.abu <- readRDS("data/umflistabu.rds")
 
 # Fit and plot the polynomial model versions using unmarked with increasing polynomial terms of the covariate
-abu.models <- list()
+
 formulae <- list(
   "Linear" = as.formula(paste("~ num_cams_active_at_date ~", cov,"+ (1|Landscape) + (1|Year)")),
   "Quadratic" = as.formula(paste("~ num_cams_active_at_date ~ poly(", cov, ", 2, raw = TRUE) + (1|Landscape) + (1|Year)")),
@@ -47,22 +48,25 @@ formulae <- list(
 # Set up the year covariate for the data
 umf.list.abu[[sp]]@siteCovs$Year <- as.numeric(as.factor(stringr::str_extract(umf.list.abu[[sp]]@siteCovs[['survey_id']], 
                                                                               stringr::regex("(\\d+)(?!.*\\d)"))))
+
+# select the correct polynomial formula
+
+current.form <- formulae[[poly]]
+
 # Abundance models
-for (name in names(formulae)) {
-  print(paste0('Fitting frequentist models, currently on the ', name, ' model'))
-  # Pcount models = RN
-  abu.models[[name]] <- ubms::stan_pcount(formulae[[name]], data = umf.list.abu[[sp]])
-}
+
+# Pcount models = NMIX
+abu.model <- ubms::stan_pcount(current.form , data = umf.list.abu[[sp]])
 
 ### Save the models in the HPC environment
 
 # Create a useful naming scheme
-modname <- date.wrap(gsub(" ","_",paste0(sp,"_Poly_", cov)))
+modname <- date.wrap(gsub(" ","_",paste0(sp,"_Poly_", cov, "_", poly)))
 
 pathname <- paste0('results/Abundance/', modname, ".rds")
 
 # Save it on the HPC environment
-saveRDS(abu.models, pathname)
+saveRDS(abu.model, pathname)
 
 
 
