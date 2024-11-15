@@ -1,0 +1,5 @@
+Species,Covariate,Model_Type,correlation_GAM,nrmse_GAM,Bayes_P,C_Hat,DIC
+Sus scrofa,Avg_forest_cover_3km,GAM,NA,NA,0.91,1,8232.54
+Sus scrofa,Avg_forest_cover_3km,Linear,0.96,17,0.9,1,8238.29
+Sus scrofa,Avg_forest_cover_3km,Quadratic,0.92,50.6,0.9,1,8234.87
+Sus scrofa,Avg_forest_cover_3km,Cubic,0.96,91.1,0.91,1,8231.64

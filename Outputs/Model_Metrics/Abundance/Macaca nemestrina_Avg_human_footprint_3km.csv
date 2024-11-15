@@ -1,0 +1,5 @@
+Species,Covariate,Model_Type,correlation_GAM,nrmse_GAM,Bayes_P,C_Hat,DIC
+Macaca nemestrina,Avg_human_footprint_3km,GAM,NA,NA,0,0.53,55452.35
+Macaca nemestrina,Avg_human_footprint_3km,Linear,0.82,11.6,0,0.51,55556.66
+Macaca nemestrina,Avg_human_footprint_3km,Quadratic,0.96,6.7,0,0.52,56716.93
+Macaca nemestrina,Avg_human_footprint_3km,Cubic,0.98,4.9,0,0.52,57494.55

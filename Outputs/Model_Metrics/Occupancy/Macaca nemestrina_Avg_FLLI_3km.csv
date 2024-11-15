@@ -1,0 +1,5 @@
+Species,Covariate,Model_Type,correlation_GAM,nrmse_GAM,Bayes_P,C_Hat,DIC
+Macaca nemestrina,Avg_FLLI_3km,GAM,NA,NA,0.74,1,7991.38
+Macaca nemestrina,Avg_FLLI_3km,Linear,-0.66,33.9,0.73,1,7997.63
+Macaca nemestrina,Avg_FLLI_3km,Quadratic,0.99,45.4,0.73,1,7991.65
+Macaca nemestrina,Avg_FLLI_3km,Cubic,0.98,49.9,0.73,1,7992.4

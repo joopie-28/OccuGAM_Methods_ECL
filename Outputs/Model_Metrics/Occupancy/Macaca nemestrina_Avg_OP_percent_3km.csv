@@ -1,0 +1,4 @@
+Species,Covariate,Model_Type,correlation_GAM,nrmse_GAM,Bayes_P,C_Hat,DIC
+Macaca nemestrina,Avg_OP_percent_3km,GAM,NA,NA,0.73,1,7993.54
+Macaca nemestrina,Avg_OP_percent_3km,Linear,0.98,64.6,0.74,1,7990.22
+Macaca nemestrina,Avg_OP_percent_3km,Quadratic,0.99,305.3,0.74,1,8004.54

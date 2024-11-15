@@ -1,0 +1,5 @@
+Species,Covariate,Model_Type,correlation_GAM,nrmse_GAM,Bayes_P,C_Hat,DIC
+Sus scrofa,Avg_FLLI_3km,GAM,NA,NA,0.9,1,8234.21
+Sus scrofa,Avg_FLLI_3km,Linear,0.99,27.1,0.91,1,8235.21
+Sus scrofa,Avg_FLLI_3km,Quadratic,0.99,35.8,0.9,1,8236.84
+Sus scrofa,Avg_FLLI_3km,Cubic,0.66,56.4,0.91,1,8230.7
