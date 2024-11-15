@@ -9,6 +9,35 @@
 # Packages
 library(data.table)
 library(hydroGOF)
+library(plotrix)
+library(tidyverse)
+
+
+# Functions
+
+auto.legend.pos <- function(x,y,xlim=NULL,ylim=NULL) {
+  if (dev.cur() > 1) {
+    p <- par('usr')
+    if (is.null(xlim)) xlim <- p[1:2]
+    if (is.null(ylim)) ylim <- p[3:4]
+  } else {
+    if (is.null(xlim)) xlim <- range(x, na.rm = TRUE)
+    if (is.null(ylim)) ylim <- range(y, na.rm = TRUE)
+  }
+  countIt <- function(a) {
+    tl <- sum(x <= xlim[1]*(1-a)+xlim[2]*a & y >= ylim[1]*a+ylim[2]*(1-a))
+    tr <- sum(x >= xlim[1]*a+xlim[2]*(1-a) & y >= ylim[1]*a+ylim[2]*(1-a))
+    bl <- sum(x <= xlim[1]*(1-a)+xlim[2]*a & y <= ylim[1]*(1-a)+ylim[2]*a)
+    br <- sum(x >= xlim[1]*a+xlim[2]*(1-a) & y <= ylim[1]*(1-a)+ylim[2]*a)
+    c(topleft=tl,topright=tr,bottomleft=bl,bottomright=br)
+  }
+  for (k in seq(0.5,0.1,by=-0.05)) {
+    a <- countIt(k)
+    if (sum(a==0)>0) break
+  }
+  names(a)[which(a==0)][1]   # may delete "[1]"
+}
+
 
 # Specify the results folder
 result.folder <- "/Users/sassen/Desktop/05_HPC_Comprehensive" # change to dropbox
@@ -82,6 +111,9 @@ for(cov in covariates){
   }
 }
 
+# Keep environemnt clean
+rm(abu.mod.summary.list)
+
 
 #############################
 ### P2 - Occupancy Models ###
@@ -147,91 +179,233 @@ for(cov in covariates){
   }
 }
 
-
-
-
-
-
+rm(occu.mod.summary.list)
 
 #### Plotting #####
-plot(mod.output$`50%`~mod.output$cov, type='l', ylim=c(0,100))
-lines(mod.output$`97.5%`~mod.output$cov)
-lines(mod.output$`2.5%`~mod.output$cov)
 
-plot(GAM.output$`50%`~GAM.output$cov, type='l', ylim = c(0,100))
-
-
-
-
-
-
-lines(mod.extract$Draws$Quantiles$`50%`~ mod.extract$Draws$Quantiles$cov, type='l')
-
-
-
-
-# SOMETHING MESSY WITH THE FITTING PROCESS! - need to fix now.
-
-test.pcount <- unmarked::pcount(~num_cams_active_at_date~poly(Avg_FLLI_3km,3) + (1|Landscape) , data = umf.list.abu$`Macaca nemestrina`)
-
-
-# Make predictions based on the fitted model
-predictions <- unmarked::predict(test.pcount, type = "state", re.form=NA )
-
-# Combine predictions with the footprint values for plotting
-plot_data <- data.frame(Avg_FLLI_3km = umf.list.abu$`Macaca nemestrina`@siteCovs$Avg_FLLI_3km, 
-                        predicted_abundance = predictions$Predicted)
-
-plot(plot_data$predicted_abundance~plot_data$Avg_FLLI_3km, type='p', ylim=c(0,200))
-# Plot the results
-ggplot(plot_data, aes(x = Avg_human_footprint_3km, y = predicted_abundance)) +
-  geom_line() +
-  labs(x = "Average Human Footprint (3km)", 
-       y = "Predicted Abundance of Sus scrofa", 
-       title = "Predicted Abundance of Sus scrofa vs. Human Footprint") +
-  theme_minimal() +ylim(0,35)
-
-
-GAM.output <- readRDS(paste0(result.folder, "/Abundance/results/PLOTTING_RDS/", cov, "/", GAM.mod, ".rds"))$Draws$Quantiles
-
-lines(GAM.output$`50%`~GAM.output$cov )
-lines(GAM.output$`2.5%`~GAM.output$cov )
-lines(GAM.output$`97.5%`~GAM.output$cov )
-tmp_est <- exp(intercept + as.matrix(newdat[c('DisCov', 'DisCov2', 'DisCov3')]) %*% t(mod_mcmc[,2:4]))
-
-lines(mod.extract$Draws$Quantiles$`50%` ~ mod.extract$Draws$Quantiles$cov, col = 'red', lwd =1.5) 
-points(mod$Full_model$q50$lambda~mod$Data_List$DisCov)
-
-
-toplot <- matrix(NA, 1000, 3)
-for(i in 1:1000) {
-  p.tmp <- with(mod$Full_model$sims.list,
-                      b0 + b1 * newdat[i,'DisCov'] + b2 * newdat[i,'DisCov2'] + b3 * newdat[i,'DisCov3'])
-  p.tmp <- exp(p.tmp)
-  toplot[i, 1] <- mean(p.tmp)
-  toplot[i, 2:3] <- hdi(p.tmp)
+PlotAllModelsOccu <- function(sp, cov){
+  
+  gam.i <- which(full.occu.mod.summary$Covariate == cov & full.occu.mod.summary$Species == sp & full.occu.mod.summary$Model_Type == 'GAM')
+  
+  GAM.output <- readRDS(paste0(result.folder, "/Occupancy/results/PLOTTING_RDS/", full.occu.mod.summary$Covariate[gam.i], "/", full.occu.mod.summary$modname[gam.i], ".rds"))$Draws$Quantiles
+  
+  layout(matrix(c(1,1,1,1,1,1,2,3,4,2,3,4), ncol = 3, byrow = TRUE), widths = c(1,1, 1), heights = c(1.5, 1.5, 1.5))
+  #layout(matrix(c(1, 2, 1, 3, 1, 4), ncol = 2, byrow = TRUE), widths = c(1.8, 1), heights = c(1.5, 1.5, 1.5))
+  par(mar = c(5, 5, 4, 1)) 
+  plot(GAM.output$`50%`~GAM.output$cov, type='l', ylim = c(0,1), lty = 1, lwd =2, col ='black', main='Generalised Additive Model', ylab = 'Occupancy', xlab = cov, 
+       cex.main = 2.5,   # Increase title size
+       cex.lab = 2,    # Increase axis label size
+       cex.axis = 2,
+       yaxs="i")   # Increase axis tick label size)
+  lines(GAM.output$`97.5%`~GAM.output$cov, lty =2)
+  lines(GAM.output$`2.5%`~GAM.output$cov, lty =2)
+  pos <- auto.legend.pos(y=GAM.output$`50%`, x= GAM.output$cov)
+  legend(pos, legend = c('Mean Posterior Prediction', '95%-Bayesian CI'), lty = c(1,2), lwd = c(1,2), col=c('black', 'grey'), cex=1.5)
+  
+  linear.i <- which(full.occu.mod.summary$Covariate == cov & full.occu.mod.summary$Species == sp & full.occu.mod.summary$Model_Type == 'Linear')
+  
+  mod.output <- readRDS(paste0(result.folder, "/Occupancy/results/PLOTTING_RDS/", full.occu.mod.summary$Covariate[linear.i], "/", full.occu.mod.summary$modname[linear.i], ".rds"))$Draws$Quantiles
+  
+  plot(mod.output$`50%`~mod.output$cov, type='n', ylim=c(0,1), main = 'Linear Model',ylab = 'Occupancy', xlab = cov,
+       cex.main = 2.5,   # Increase title size
+       cex.lab = 2,    # Increase axis label size
+       cex.axis = 2,
+       yaxs="i")   # Increase axis tick label size))
+  lines(mod.output$`97.5%`~mod.output$cov, lty =2)
+  lines(mod.output$`2.5%`~mod.output$cov, lty =2)
+  polygon(c(mod.output$cov, rev(mod.output$cov)), c(mod.output$`50%`, rev(GAM.output$`50%`)), col='grey', border =NA)
+  lines(GAM.output$`50%`~GAM.output$cov,lty = 1, lwd =2, col ='black')
+  lines(mod.output$`50%`~mod.output$cov, lty =1,col = 'green3', lwd=2)
+  pos <- auto.legend.pos(y=mod.output$`50%`, x= mod.output$cov)
+  legend(pos, legend = c('Linear Mean Posterior Prediction', 'GAM Mean Posterior Prediction', '95%-Bayesian CI'), lty = c(1, 1,2),, col=c('green3','black', 'grey'), cex=1.5)
+  
+  
+  quad.i <- which(full.occu.mod.summary$Covariate == cov & full.occu.mod.summary$Species == sp & full.occu.mod.summary$Model_Type == 'Quadratic')
+  
+  mod.output <- readRDS(paste0(result.folder, "/Occupancy/results/PLOTTING_RDS/", full.occu.mod.summary$Covariate[quad.i], "/", full.occu.mod.summary$modname[quad.i], ".rds"))$Draws$Quantiles
+  
+  
+  plot(mod.output$`50%`~mod.output$cov, type='l', ylim=c(0,1), main = 'Quadratic Model',ylab = 'Occupancy', xlab = cov,
+       cex.main = 2.5,   # Increase title size
+       cex.lab = 2,    # Increase axis label size
+       cex.axis = 2,
+       yaxs="i")   # Increase axis tick label size))
+  lines(mod.output$`97.5%`~mod.output$cov, lty =2)
+  lines(mod.output$`2.5%`~mod.output$cov, lty =2)
+  polygon(c(mod.output$cov, rev(mod.output$cov)), c(mod.output$`50%`, rev(GAM.output$`50%`)), col='grey', border =NA)
+  lines(GAM.output$`50%`~GAM.output$cov,lty = 1, lwd =2, col ='black')
+  lines(mod.output$`50%`~mod.output$cov, lty =1,col = 'steelblue', lwd=2)
+  pos <- auto.legend.pos(y=mod.output$`50%`, x= mod.output$cov)
+  legend(pos, legend = c('Quadratic Mean Posterior Prediction', 'GAM Mean Posterior Prediction', '95%-Bayesian CI'), lty = c(1, 1,2),, col=c('steelblue','black', 'grey'), cex=1.5)
+  
+  
+  cubic.i <- which(full.occu.mod.summary$Covariate == cov & full.occu.mod.summary$Species == sp & full.occu.mod.summary$Model_Type == 'Cubic')
+  
+  mod.output <- readRDS(paste0(result.folder, "/Occupancy/results/PLOTTING_RDS/", full.occu.mod.summary$Covariate[cubic.i], "/", full.occu.mod.summary$modname[cubic.i], ".rds"))$Draws$Quantiles
+  
+  
+  plot(mod.output$`50%`~mod.output$cov, type='l', ylim=c(0,1), main = 'Cubic model',ylab = 'Occupancy', xlab = cov,
+       cex.main = 2.5,   # Increase title size
+       cex.lab = 2,    # Increase axis label size
+       cex.axis = 2,
+       yaxs="i")   # Increase axis tick label size))
+  lines(mod.output$`97.5%`~mod.output$cov, lty =2)
+  lines(mod.output$`2.5%`~mod.output$cov, lty =2)
+  polygon(c(mod.output$cov, rev(mod.output$cov)), c(mod.output$`50%`, rev(GAM.output$`50%`)), col='grey', border =NA)
+  lines(GAM.output$`50%`~GAM.output$cov,lty = 1, lwd =2, col ='black')
+  lines(mod.output$`50%`~mod.output$cov, lty =1,col = 'purple', lwd=2)
+  pos <- auto.legend.pos(y=mod.output$`50%`, x= mod.output$cov)
+  legend(pos, legend = c('Cubic Mean Posterior Prediction', 'GAM Mean Posterior Prediction', '95%-Bayesian CI'), lty = c(1, 1,2),, col=c('purple','black', 'grey'), cex=1.5)
 }
 
-plot(toplot[,1]~newdat$DisCov, ylim=range(toplot), type='l', las=1,
-     xlab="HFP", ylab="ABU")
+for (sp in c( 'Sus scrofa')){
+  for(cov in covariates ){
+    
+    pdf(paste0('Outputs/Occupany_Plots', sp, '_',cov, '.pdf'), width =25, height=15)
+    
+    PlotAllModelsOccu(sp, cov)
+    
+    dev.off()
+  }
+}
 
-polygon(x=c(xx, rev(xx)),
-        y=c(toplot[, 2], rev(toplot[, 3])),
-        col=adjustcolor('skyblue', 0.5), border=NA)
+# Abundance
 
-mod$Full_model$q50
+PlotAllModelsAbu <- function(sp, cov){
+  
+  gam.i <- which(full.abu.mod.summary$Covariate == cov & full.abu.mod.summary$Species == sp & full.abu.mod.summary$Model_Type == 'GAM')
+  
+  GAM.output <- readRDS(paste0(result.folder, "/Abundance/results/PLOTTING_RDS/", full.abu.mod.summary$Covariate[gam.i], "/", full.abu.mod.summary$modname[gam.i], ".rds"))$Draws$Quantiles
+  y.max <- max(GAM.output$`97.5%`) * 1.2 
+  
+  layout(matrix(c(1,1,1,1,1,1,2,3,4,2,3,4), ncol = 3, byrow = TRUE), widths = c(1,1, 1), heights = c(1.5, 1.5, 1.5))
+  #layout(matrix(c(1, 2, 1, 3, 1, 4), ncol = 2, byrow = TRUE), widths = c(1.4, 1), heights = c(1, 1, 1))
+  par(mar = c(5, 5, 4, 1)) 
+  plot(GAM.output$`50%`~GAM.output$cov, type='l', ylim = c(0, y.max), lty = 1, lwd =2, col ='black', main='Generalised Additive Model', ylab = 'Abundance', xlab = cov, 
+       cex.main = 2.5,   # Increase title size
+       cex.lab = 2,    # Increase axis label size
+       cex.axis = 2,
+       yaxs="i")   # Increase axis tick label size)
+  lines(GAM.output$`97.5%`~GAM.output$cov, lty =2)
+  lines(GAM.output$`2.5%`~GAM.output$cov, lty =2)
+  
+  pos <- auto.legend.pos(y=GAM.output$`50%`, x= GAM.output$cov)
+  legend(pos, legend = c('Mean Posterior Prediction', '95%-Bayesian CI'), lty = c(1,2), lwd = c(1,2), col=c('black', 'grey'), cex=1.5)
+  
+  linear.i <- which(full.abu.mod.summary$Covariate == cov & full.abu.mod.summary$Species == sp & full.abu.mod.summary$Model_Type == 'Linear')
+  
+  mod.output <- readRDS(paste0(result.folder, "/Abundance/results/PLOTTING_RDS/", full.abu.mod.summary$Covariate[linear.i], "/", full.abu.mod.summary$modname[linear.i], ".rds"))$Draws$Quantiles
+  
+  plot(mod.output$`50%`~mod.output$cov, type='n', ylim=c(0, y.max ), main = 'Linear Model',ylab = 'Abundance', xlab = cov,
+       cex.main = 2.5,   # Increase title size
+       cex.lab = 2,    # Increase axis label size
+       cex.axis = 2,
+       yaxs="i")   # Increase axis tick label size))
+  lines(mod.output$`97.5%`~mod.output$cov, lty =2)
+  lines(mod.output$`2.5%`~mod.output$cov, lty =2)
+  polygon(c(mod.output$cov, rev(mod.output$cov)), c(mod.output$`50%`, rev(GAM.output$`50%`)), col='grey', border =NA)
+  lines(GAM.output$`50%`~GAM.output$cov,lty = 1, lwd =2, col ='black')
+  lines(mod.output$`50%`~mod.output$cov, lty =1,col = 'green3', lwd=2)
+  pos <- auto.legend.pos(y=mod.output$`50%`, x= mod.output$cov)
+  legend(pos, legend = c('Linear Mean Posterior Prediction', 'GAM Mean Posterior Prediction', '95%-Bayesian CI'), lty = c(1, 1,2),, col=c('green3','black', 'grey'), cex=1.5)
+  
+  
+  quad.i <- which(full.abu.mod.summary$Covariate == cov & full.abu.mod.summary$Species == sp & full.abu.mod.summary$Model_Type == 'Quadratic')
+  
+  mod.output <- readRDS(paste0(result.folder, "/Abundance/results/PLOTTING_RDS/", full.abu.mod.summary$Covariate[quad.i], "/", full.abu.mod.summary$modname[quad.i], ".rds"))$Draws$Quantiles
+  
+  
+  plot(mod.output$`50%`~mod.output$cov, type='l', ylim=c(0, y.max ), main = 'Quadratic Model',ylab = 'Abundance', xlab = cov,
+       cex.main = 2.5,   # Increase title size
+       cex.lab = 2,    # Increase axis label size
+       cex.axis = 2,
+       yaxs="i")   # Increase axis tick label size))
+  lines(mod.output$`97.5%`~mod.output$cov, lty =2)
+  lines(mod.output$`2.5%`~mod.output$cov, lty =2)
+  polygon(c(mod.output$cov, rev(mod.output$cov)), c(mod.output$`50%`, rev(GAM.output$`50%`)), col='grey', border =NA)
+  lines(GAM.output$`50%`~GAM.output$cov,lty = 1, lwd =2, col ='black')
+  lines(mod.output$`50%`~mod.output$cov, lty =1,col = 'steelblue', lwd=2)
+  pos <- auto.legend.pos(y=mod.output$`50%`, x= mod.output$cov)
+  legend(pos, legend = c('Quadratic Mean Posterior Prediction', 'GAM Mean Posterior Prediction', '95%-Bayesian CI'), lty = c(1, 1,2),, col=c('steelblue','black', 'grey'), cex=1.5)
+  
+  
+  cubic.i <- which(full.abu.mod.summary$Covariate == cov & full.abu.mod.summary$Species == sp & full.abu.mod.summary$Model_Type == 'Cubic')
+  
+  mod.output <- readRDS(paste0(result.folder, "/Abundance/results/PLOTTING_RDS/", full.abu.mod.summary$Covariate[cubic.i], "/", full.abu.mod.summary$modname[cubic.i], ".rds"))$Draws$Quantiles
+  
+  
+  plot(mod.output$`50%`~mod.output$cov, type='l', ylim=c(0, y.max ), main = 'Cubic model',ylab = 'Abundance', xlab = cov,
+       cex.main = 2.5,   # Increase title size
+       cex.lab = 2,    # Increase axis label size
+       cex.axis = 2,
+       yaxs="i")   # Increase axis tick label size))
+  lines(mod.output$`97.5%`~mod.output$cov, lty =2)
+  lines(mod.output$`2.5%`~mod.output$cov, lty =2)
+  polygon(c(mod.output$cov, rev(mod.output$cov)), c(mod.output$`50%`, rev(GAM.output$`50%`)), col='grey', border =NA)
+  lines(GAM.output$`50%`~GAM.output$cov,lty = 1, lwd =2, col ='black')
+  lines(mod.output$`50%`~mod.output$cov, lty =1,col = 'purple', lwd=2)
+  pos <- auto.legend.pos(y=mod.output$`50%`, x= mod.output$cov)
+  legend(pos, legend = c('Cubic Mean Posterior Prediction', 'GAM Mean Posterior Prediction', '95%-Bayesian CI'), lty = c(1, 1,2),, col=c('purple','black', 'grey'), cex=1.5)
+}
+
+for (sp in c('Macaca nemestrina', 'Sus scrofa')){
+  for(cov in covariates ){
+    print(sp)
+    print(cov)
+    pdf(paste0('Outputs/Abundance_Plots/', sp, '_',cov, '.pdf'), width =25, height=15)
+    
+    PlotAllModelsAbu(sp, cov)
+    
+    dev.off()
+  }
+}
 
 
-plot(mod.extract$Draws$Quantiles$`50%`~ mod.extract$Draws$Quantiles$cov)
+# export statistics Occupancy
 
-plot(mod$Full_model$q50$N~ mod$Data_List$DisCov, col=as.factor(mod$Data_List$Landscape))
+for (sp in c('Macaca nemestrina', 'Sus scrofa')){
+  for(cov in covariates ){
+    print(sp)
+    print(cov)
+   
+   temp <- full.occu.mod.summary |>
+      filter(Species == sp & Covariate == cov) |> 
+      mutate_if(is.numeric, round, digits =2) |>
+      select(Species,
+             Covariate,
+             Model_Type,
+             correlation_GAM,
+             nrmse_GAM,
+             Bayes_P,
+             C_Hat,
+             DIC)
+   
+   write_csv(temp,
+             paste0('Outputs/Model_metrics/Occupancy/', sp, '_', cov, '.csv'))
+   
+   temp <- full.abu.mod.summary |>
+     filter(Species == sp & Covariate == cov) |>
+     mutate_if(is.numeric, round, digits =2) |>
+     select(Species,
+            Covariate,
+            Model_Type,
+            correlation_GAM,
+            nrmse_GAM,
+            Bayes_P,
+            C_Hat,
+            DIC)
+   
+   write_csv(temp,
+             paste0('Outputs/Model_metrics/Abundance/', sp, '_', cov, '.csv'))
+    
+  }
+}
 
 
-exp(mod$Full_model$q50$b0 * rep(1, 524) + 
-mod$Full_model$q50$b1 * mod$Data_List$DisCov +
-mod$Full_model$q50$b2 * mod$Data_List$DisCov2 +
-mod$Full_model$q50$b3 * mod$Data_List$DisCov3 +
-  mod$Full_model$q50$bLandscape)
+
+
+
+
 
 
 

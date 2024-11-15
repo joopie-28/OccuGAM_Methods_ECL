@@ -40,9 +40,17 @@ model {
       #### Derived Parameters
       # Bayes P-Value
       
-      Presi[i,j] <- (y[i,j] - det_prob[i,j])^2       # Calculate the squared residual error of the observed data 
-      y.new[i,j] ~ dbin(det_prob[i,j], N[i])              # Simulate observed data 
-      Presi.new[i,j] <- (y.new[i,j] - det_prob[i,j])^2  # Calculate squared residual error of simulated data 
+      ## Expected count at site i, survey j
+      exp[i, j] <- N[i] * det_prob[i, j] 
+      
+      ## Discrepancy 
+      ## (note small value added to denominator to avoid potential divide by zero)
+      Presi[i, j] <- pow((y[i, j] - exp[i, j]), 2) / (exp[i, j] + 0.5)
+      
+      y.rep[i,j] ~ dbin(det_prob[i,j], N[i])    
+      # Simulate observed data 
+      ## Discrepancy 
+      Presi.new[i, j] <- pow((y.rep[i, j] - exp[i, j]), 2) / (exp[i, j] + 0.5)
       
       # Log likelihood for WAIC 
      # log_lik0[i, j] <- logdensity.bin(y[i, j], det_prob[i,j], N[i])

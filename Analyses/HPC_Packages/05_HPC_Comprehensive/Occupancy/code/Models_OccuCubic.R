@@ -61,9 +61,9 @@ model {
   aEffort ~ dnorm(0,0.75)
   
   ## Parametric effect priors 
-  b0 ~ dnorm(0,0.75) 
-  b1 ~ dnorm(0,0.75) 
-  b2 ~ dnorm(0,0.75)
-  b3 ~ dnorm(0,0.75) 
+  b0 ~ dnorm(0,0.1) 
+  b1 ~ dnorm(0,0.1) 
+  b2 ~ dnorm(0,0.1)
+  b3 ~ dnorm(0,0.1) 
   
 }
