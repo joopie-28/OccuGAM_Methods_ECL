@@ -1,0 +1,5 @@
+Species,Covariate,Model_Type,nrmse_GAM,Bayes_P,C_Hat,LOOIC
+Rusa unicolor,Avg_OP_percent_3km,GAM,NA,0.76,1.03,9034.34
+Rusa unicolor,Avg_OP_percent_3km,Linear,3,0.53,1,8452.16
+Rusa unicolor,Avg_OP_percent_3km,Quadratic,19.5,0.58,1.01,8547.29
+Rusa unicolor,Avg_OP_percent_3km,Cubic,23.2,0.64,1.01,8488.24

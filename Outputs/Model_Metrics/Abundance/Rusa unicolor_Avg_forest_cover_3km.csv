@@ -1,0 +1,5 @@
+Species,Covariate,Model_Type,nrmse_GAM,Bayes_P,C_Hat,LOOIC
+Rusa unicolor,Avg_forest_cover_3km,GAM,NA,0.31,0.97,9359.1
+Rusa unicolor,Avg_forest_cover_3km,Linear,23.7,0.63,1.02,9346.33
+Rusa unicolor,Avg_forest_cover_3km,Quadratic,36.2,0.63,1.02,9337.73
+Rusa unicolor,Avg_forest_cover_3km,Cubic,82.3,0.63,1.02,9367.94

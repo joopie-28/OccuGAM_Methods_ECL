@@ -32,9 +32,11 @@ model {
     
     for(j in 1:nsurvey) {
       # Detection probability modelled as a function of sampling effort i.e. camera's
-      logit(det_prob[i,j]) <- a0 + aEffort * Effort[i, j] 
-      y[i,j] ~ dbern(det_prob[i,j] * z[i])
+      logit(det_prob[i,j]) <- lp[i,j]
+      mu.lp[i, j] <- a0 + aEffort * Effort[i, j]
       
+      lp[i, j] ~ dnorm(mu.lp[i, j], tau.p)
+      y[i,j] ~ dbern(det_prob[i,j] * z[i])
       
       #### Derived Parameters
       #Bayes P-Value
@@ -44,11 +46,11 @@ model {
       Presi.new[i,j] <- (y.new[i,j] - det_prob[i,j])^2  # Calculate squared residual error of simulated data 
       
       # log-likelihood for WAIC (Occupancy)
-     # log_lik0[i,j] <- logdensity.bern(y[i,j], det_prob[i,j] * z[i])
+      log_lik0[i,j] <- logdensity.bern(y[i,j], det_prob[i,j] * z[i])
     }
     
     # Calculate row-level (site level) log-likelihood
-   # log_lik[i] <- sum(log_lik0[i,])
+    log_lik[i] <- sum(log_lik0[i,])
   }
   
   SSEobs <- sum(Presi[,])     # Calculate the sum of squared residual errors for observed data
@@ -59,6 +61,8 @@ model {
   # the detection process priors
   a0 ~ dnorm(0,0.75)
   aEffort ~ dnorm(0,0.75)
+  tau.p <- pow(sd.p, -2)
+  sd.p ~ dunif(0, 3)
   ## Parametric effect priors 
   b[1] ~ dnorm(0,0.75)
   ## prior for s(covariate), with a maximum spline complexity of 5

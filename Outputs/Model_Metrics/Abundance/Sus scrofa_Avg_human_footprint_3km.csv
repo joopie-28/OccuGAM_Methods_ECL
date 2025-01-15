@@ -1,5 +1,5 @@
-Species,Covariate,Model_Type,correlation_GAM,nrmse_GAM,Bayes_P,C_Hat,DIC
-Sus scrofa,Avg_human_footprint_3km,GAM,NA,NA,0,0.77,57944.16
-Sus scrofa,Avg_human_footprint_3km,Linear,0.96,10.3,0,0.77,58750.33
-Sus scrofa,Avg_human_footprint_3km,Quadratic,0.99,4.3,0,0.77,56713.35
-Sus scrofa,Avg_human_footprint_3km,Cubic,1,2.6,0,0.77,57863.95
+Species,Covariate,Model_Type,nrmse_GAM,Bayes_P,C_Hat,LOOIC
+Sus scrofa,Avg_human_footprint_3km,GAM,NA,0.68,1.01,34797.11
+Sus scrofa,Avg_human_footprint_3km,Linear,12.5,0.43,1,34740.05
+Sus scrofa,Avg_human_footprint_3km,Quadratic,5.8,0.44,1,34782.49
+Sus scrofa,Avg_human_footprint_3km,Cubic,12,0.34,0.98,38978.73

@@ -20,10 +20,10 @@
 #SBATCH --partition=general
 
 # Select 12 hours (h:m:s format) of walltime for small mods
-#SBATCH --time=48:00:00
+#SBATCH --time=336:00:00
 
 # SPECIFY THE JOB ARRAY-
-#SBATCH --array=1-32
+#SBATCH --array=1-64
 
 # SPECIFY THE JOB NAME
 #SBATCH --job-name=OCCUGAM_MIDDLE
@@ -31,6 +31,17 @@
 # SPECIFY .err AND .out FILE LOCATIONS
 #SBATCH --output=/home/s4633921/05_HPC_Comprehensive/Occupancy/results/OCCUGAM/slurm-%A_%a.out
 #SBATCH --error=/home/s4633921/05_HPC_Comprehensive/Occupancy/results/ERRORS/slurm-%A_%a.err
+
+MAX_RETRIES=10
+RETRY_FILE="retry_count_${SLURM_ARRAY_TASK_ID}.txt"
+
+# Initialize retry counter
+if [ ! -f $RETRY_FILE ]; then
+  echo 0 > $RETRY_FILE
+fi
+
+# Read the current retry count
+RETRY_COUNT=$(cat $RETRY_FILE)
 
 # LOAD THE RELEVANT MODULE
 module load rjags/4-10-foss-2021a-r-4.1.0 
@@ -48,3 +59,24 @@ pwd
 
 # LOAD THE R SCRIPT, SUBMIT JOB AND SPECIFY THE ARRAY INDEX 
 Rscript /home/s4633921/05_HPC_Comprehensive/Occupancy/code/01_HPC_FitPolynomialOccuJags.R $SLURM_ARRAY_TASK_ID
+
+# We have a (very) small subset of models that fails sometimes due to sensitivity of cubics.
+# a simple line of code to save us manual troubles
+
+# Extract exit code for job
+EXIT_CODE=$?
+  
+if [ $EXIT_CODE -ne 0 ]; then
+  if [ $RETRY_COUNT -lt $MAX_RETRIES ]; then
+    echo "Task $SLURM_ARRAY_TASK_ID, Attempt $((RETRY_COUNT + 1)): R script failed with exit code $EXIT_CODE. Retrying..."
+    echo $((RETRY_COUNT + 1)) > $RETRY_FILE
+    sbatch --array=$SLURM_ARRAY_TASK_ID $0  # Resubmit the current task
+  else
+    echo "Task $SLURM_ARRAY_TASK_ID: R script failed after $MAX_RETRIES attempts. No further retries."
+    rm $RETRY_FILE  # Clean up retry counter for this task
+  fi
+else
+  echo "Task $SLURM_ARRAY_TASK_ID completed successfully."
+  rm $RETRY_FILE  # Clean up retry counter for this task
+fi
+

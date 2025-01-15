@@ -1,0 +1,5 @@
+Species,Covariate,Model_Type,nrmse_GAM,Bayes_P,C_Hat,LOOIC
+Rusa unicolor,Avg_FLLI_3km,GAM,NA,0.52,1,8658.26
+Rusa unicolor,Avg_FLLI_3km,Linear,22.3,0.5,1,8466.84
+Rusa unicolor,Avg_FLLI_3km,Quadratic,35.6,0.65,1.01,8799.31
+Rusa unicolor,Avg_FLLI_3km,Cubic,78.7,0.53,1,8432.19

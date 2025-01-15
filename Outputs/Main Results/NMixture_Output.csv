@@ -1,0 +1,65 @@
+Species,Covariate,Model_Type,DIC,Bayes_P,C_Hat,modname,correlation_GAM,nrmse_GAM,LOOIC,LOOIC_lower,LOOIC_upper,cov_name
+Macaca nemestrina,Avg_OP_percent_3km,GAM,17751.349165892214,0.498125,0.9999491873687508,Macaca_nemestrina_Avg_OP_percent_3km_GAM_2025-01-04_JMS,NA,NA,NA,NA,NA,Oil Palm
+Macaca nemestrina,Avg_OP_percent_3km,Linear,17791.69033649268,0.43825,0.9958884045725555,Macaca_nemestrina_Avg_OP_percent_3km_Linear_2025-01-04_JMS,0.9995577048955612,1,NA,NA,NA,Oil Palm
+Macaca nemestrina,Avg_OP_percent_3km,Quadratic,17853.986024417245,0.4395,0.9962175519187783,Macaca_nemestrina_Avg_OP_percent_3km_Quadratic_2025-01-04_JMS,0.9798039549003653,13.5,NA,NA,NA,Oil Palm
+Macaca nemestrina,Avg_OP_percent_3km,Cubic,17812.576437057814,0.4295,0.9954719419543638,Macaca_nemestrina_Avg_OP_percent_3km_Cubic_2025-01-04_JMS,0.9766201365935047,12.8,NA,NA,NA,Oil Palm
+Macaca nemestrina,Avg_FLLI_3km,GAM,17835.446512538518,0.510625,1.0004624004884064,Macaca_nemestrina_Avg_FLLI_3km_GAM_2025-01-04_JMS,NA,NA,NA,NA,NA,Forest Integrity
+Macaca nemestrina,Avg_FLLI_3km,Linear,17757.365319613502,0.429875,0.9953059063966909,Macaca_nemestrina_Avg_FLLI_3km_Linear_2025-01-04_JMS,0.955349373262084,8,NA,NA,NA,Forest Integrity
+Macaca nemestrina,Avg_FLLI_3km,Quadratic,17648.624891484982,0.34625,0.9847457443445727,Macaca_nemestrina_Avg_FLLI_3km_Quadratic_2025-01-04_JMS,0.9838554462620137,10.8,NA,NA,NA,Forest Integrity
+Macaca nemestrina,Avg_FLLI_3km,Cubic,17739.707535336303,0.327625,0.9799040436992094,Macaca_nemestrina_Avg_FLLI_3km_Cubic_2025-01-04_JMS,0.9939491717839883,9.7,NA,NA,NA,Forest Integrity
+Macaca nemestrina,Avg_human_footprint_3km,GAM,17528.174885305223,0.499375,1.0000121116108838,Macaca_nemestrina_Avg_human_footprint_3km_GAM_2025-01-04_JMS,NA,NA,NA,NA,NA,Human Footprint
+Macaca nemestrina,Avg_human_footprint_3km,Linear,17579.400530462346,0.4465,0.9967229509426918,Macaca_nemestrina_Avg_human_footprint_3km_Linear_2025-01-04_JMS,0.7583685311985185,19.7,NA,NA,NA,Human Footprint
+Macaca nemestrina,Avg_human_footprint_3km,Quadratic,17542.089154586698,0.44975,0.9968346300034698,Macaca_nemestrina_Avg_human_footprint_3km_Quadratic_2025-01-04_JMS,0.8700654194043335,13.2,NA,NA,NA,Human Footprint
+Macaca nemestrina,Avg_human_footprint_3km,Cubic,17620.658647678538,0.45275,0.9969578676283781,Macaca_nemestrina_Avg_human_footprint_3km_Cubic_2025-01-04_JMS,0.8931154004796843,16.1,NA,NA,NA,Human Footprint
+Macaca nemestrina,Avg_forest_cover_3km,GAM,17611.728565174417,0.4805,0.9994481143502401,Macaca_nemestrina_Avg_forest_cover_3km_GAM_2025-01-04_JMS,NA,NA,NA,NA,NA,Forest Cover
+Macaca nemestrina,Avg_forest_cover_3km,Linear,17779.41631137432,0.436875,0.9958839404006699,Macaca_nemestrina_Avg_forest_cover_3km_Linear_2025-01-04_JMS,0.5669848688555551,16.8,NA,NA,NA,Forest Cover
+Macaca nemestrina,Avg_forest_cover_3km,Quadratic,17689.322023570116,0.45275,0.9968186125430581,Macaca_nemestrina_Avg_forest_cover_3km_Quadratic_2025-01-04_JMS,0.6620267563253339,17.9,NA,NA,NA,Forest Cover
+Macaca nemestrina,Avg_forest_cover_3km,Cubic,17698.789954488653,0.4425,0.9964084048431807,Macaca_nemestrina_Avg_forest_cover_3km_Cubic_2025-01-04_JMS,0.8789418663781176,10.7,NA,NA,NA,Forest Cover
+Sus scrofa,Avg_OP_percent_3km,GAM,20724.025804748177,0.677875,1.0064706740185128,Sus_scrofa_Avg_OP_percent_3km_GAM_2025-01-04_JMS,NA,NA,NA,NA,NA,Oil Palm
+Sus scrofa,Avg_OP_percent_3km,Linear,20848.15036476334,0.444125,0.9965314365040308,Sus_scrofa_Avg_OP_percent_3km_Linear_2025-01-04_JMS,0.6582489577765498,20.4,NA,NA,NA,Oil Palm
+Sus scrofa,Avg_OP_percent_3km,Quadratic,20893.38161701699,0.446875,0.9966182739941948,Sus_scrofa_Avg_OP_percent_3km_Quadratic_2025-01-04_JMS,0.991276546489053,3.1,NA,NA,NA,Oil Palm
+Sus scrofa,Avg_OP_percent_3km,Cubic,20978.94628584945,0.453875,0.9972024582059141,Sus_scrofa_Avg_OP_percent_3km_Cubic_2025-01-04_JMS,0.9721447908536365,8.7,NA,NA,NA,Oil Palm
+Sus scrofa,Avg_FLLI_3km,GAM,20866.599517665833,0.688125,1.006989957150722,Sus_scrofa_Avg_FLLI_3km_GAM_2025-01-04_JMS,NA,NA,NA,NA,NA,Forest Integrity
+Sus scrofa,Avg_FLLI_3km,Linear,20809.800114447815,0.442625,0.9964820947059903,Sus_scrofa_Avg_FLLI_3km_Linear_2025-01-04_JMS,0.9775283944295177,8,NA,NA,NA,Forest Integrity
+Sus scrofa,Avg_FLLI_3km,Quadratic,20788.456578154484,0.434375,0.9962500379565107,Sus_scrofa_Avg_FLLI_3km_Quadratic_2025-01-04_JMS,0.9924470488596365,4.1,NA,NA,NA,Forest Integrity
+Sus scrofa,Avg_FLLI_3km,Cubic,20900.593376153516,0.4455,0.9964143720539619,Sus_scrofa_Avg_FLLI_3km_Cubic_2025-01-04_JMS,0.9617404932257304,11.6,NA,NA,NA,Forest Integrity
+Sus scrofa,Avg_human_footprint_3km,GAM,20722.087766275505,0.678625,1.006846387106935,Sus_scrofa_Avg_human_footprint_3km_GAM_2025-01-04_JMS,NA,NA,NA,NA,NA,Human Footprint
+Sus scrofa,Avg_human_footprint_3km,Linear,20956.42962428659,0.43,0.9959793826805141,Sus_scrofa_Avg_human_footprint_3km_Linear_2025-01-04_JMS,0.95280551214514,12.5,NA,NA,NA,Human Footprint
+Sus scrofa,Avg_human_footprint_3km,Quadratic,20923.650100348015,0.435625,0.9957133873278265,Sus_scrofa_Avg_human_footprint_3km_Quadratic_2025-01-04_JMS,0.9929973568550305,5.8,NA,NA,NA,Human Footprint
+Sus scrofa,Avg_human_footprint_3km,Cubic,20535.475506550643,0.34125,0.9846010050584812,Sus_scrofa_Avg_human_footprint_3km_Cubic_2025-01-04_JMS,0.9406047101605921,12,NA,NA,NA,Human Footprint
+Sus scrofa,Avg_forest_cover_3km,GAM,20822.915239655114,0.67475,1.0065673402585098,Sus_scrofa_Avg_forest_cover_3km_GAM_2025-01-04_JMS,NA,NA,NA,NA,NA,Forest Cover
+Sus scrofa,Avg_forest_cover_3km,Linear,20938.07693836977,0.455125,0.9971037229833319,Sus_scrofa_Avg_forest_cover_3km_Linear_2025-01-04_JMS,0.9949315912204821,4.2,NA,NA,NA,Forest Cover
+Sus scrofa,Avg_forest_cover_3km,Quadratic,20973.143936728142,0.454125,0.9973156584720952,Sus_scrofa_Avg_forest_cover_3km_Quadratic_2025-01-04_JMS,0.9968506098855003,3.3,NA,NA,NA,Forest Cover
+Sus scrofa,Avg_forest_cover_3km,Cubic,21001.35453698753,0.457875,0.9973405324819277,Sus_scrofa_Avg_forest_cover_3km_Cubic_2025-01-04_JMS,0.9992866059043326,1.4,NA,NA,NA,Forest Cover
+Rusa unicolor,Avg_OP_percent_3km,GAM,6554.053180393958,0.303125,0.9720652434964334,Rusa_unicolor_Avg_OP_percent_3km_GAM_2025-01-04_JMS,NA,NA,NA,NA,NA,Oil Palm
+Rusa unicolor,Avg_OP_percent_3km,Linear,6866.010194479864,0.6295,1.0190385446970134,Rusa_unicolor_Avg_OP_percent_3km_Linear_2025-01-04_JMS,0.8101981580768831,25.8,NA,NA,NA,Oil Palm
+Rusa unicolor,Avg_OP_percent_3km,Quadratic,7119.635281669061,0.624,1.018373608522328,Rusa_unicolor_Avg_OP_percent_3km_Quadratic_2025-01-04_JMS,0.9274444015834632,14.3,NA,NA,NA,Oil Palm
+Rusa unicolor,Avg_OP_percent_3km,Cubic,6914.448089913454,0.626625,1.0185353000218256,Rusa_unicolor_Avg_OP_percent_3km_Cubic_2025-01-04_JMS,0.9922982547647445,6.7,NA,NA,NA,Oil Palm
+Rusa unicolor,Avg_FLLI_3km,GAM,6859.567361303497,0.304125,0.9719020437323534,Rusa_unicolor_Avg_FLLI_3km_GAM_2025-01-04_JMS,NA,NA,NA,NA,NA,Forest Integrity
+Rusa unicolor,Avg_FLLI_3km,Linear,7024.746903508009,0.622875,1.0185564700738419,Rusa_unicolor_Avg_FLLI_3km_Linear_2025-01-04_JMS,0.5444731744142952,31.3,NA,NA,NA,Forest Integrity
+Rusa unicolor,Avg_FLLI_3km,Quadratic,6836.651067061746,0.631125,1.0193418870821955,Rusa_unicolor_Avg_FLLI_3km_Quadratic_2025-01-04_JMS,0.9575728483660189,9.8,NA,NA,NA,Forest Integrity
+Rusa unicolor,Avg_FLLI_3km,Cubic,6941.844077365252,0.61925,1.0178577063018701,Rusa_unicolor_Avg_FLLI_3km_Cubic_2025-01-04_JMS,0.9208658276549649,20.3,NA,NA,NA,Forest Integrity
+Rusa unicolor,Avg_human_footprint_3km,GAM,6799.846824516233,0.29675,0.971785968465918,Rusa_unicolor_Avg_human_footprint_3km_GAM_2025-01-04_JMS,NA,NA,NA,NA,NA,Human Footprint
+Rusa unicolor,Avg_human_footprint_3km,Linear,7047.9958422588825,0.625375,1.0182329143961355,Rusa_unicolor_Avg_human_footprint_3km_Linear_2025-01-04_JMS,0.9594608152183327,21.9,NA,NA,NA,Human Footprint
+Rusa unicolor,Avg_human_footprint_3km,Quadratic,7092.31367365324,0.63125,1.0189493857564784,Rusa_unicolor_Avg_human_footprint_3km_Quadratic_2025-01-04_JMS,0.8773152594234122,100.4,NA,NA,NA,Human Footprint
+Rusa unicolor,Avg_human_footprint_3km,Cubic,7139.599940411469,0.63125,1.0190163818108904,Rusa_unicolor_Avg_human_footprint_3km_Cubic_2025-01-04_JMS,0.6902427121897937,188.6,NA,NA,NA,Human Footprint
+Rusa unicolor,Avg_forest_cover_3km,GAM,6811.640396296905,0.311625,0.9729981789302585,Rusa_unicolor_Avg_forest_cover_3km_GAM_2025-01-04_JMS,NA,NA,NA,NA,NA,Forest Cover
+Rusa unicolor,Avg_forest_cover_3km,Linear,6558.300099763674,0.6335,1.0203955587373728,Rusa_unicolor_Avg_forest_cover_3km_Linear_2025-01-04_JMS,0.9582602970966673,23.7,NA,NA,NA,Forest Cover
+Rusa unicolor,Avg_forest_cover_3km,Quadratic,7048.941375713298,0.629625,1.0197385987600018,Rusa_unicolor_Avg_forest_cover_3km_Quadratic_2025-01-04_JMS,0.9005330035854356,36.2,NA,NA,NA,Forest Cover
+Rusa unicolor,Avg_forest_cover_3km,Cubic,6762.32805401023,0.630875,1.0195083906147442,Rusa_unicolor_Avg_forest_cover_3km_Cubic_2025-01-04_JMS,0.9688801613489942,82.3,NA,NA,NA,Forest Cover
+Muntiacus,Avg_OP_percent_3km,GAM,8466.12184988351,0.312,0.9769033833488997,Muntiacus_Avg_OP_percent_3km_GAM_2025-01-04_JMS,NA,NA,NA,NA,NA,Oil Palm
+Muntiacus,Avg_OP_percent_3km,Linear,8320.326400435853,0.610375,1.0124940489221512,Muntiacus_Avg_OP_percent_3km_Linear_2025-01-04_JMS,0.9510292895433815,9.7,NA,NA,NA,Oil Palm
+Muntiacus,Avg_OP_percent_3km,Quadratic,8223.059786194563,0.6105,1.0126280607207985,Muntiacus_Avg_OP_percent_3km_Quadratic_2025-01-04_JMS,0.9548142669374031,17.9,NA,NA,NA,Oil Palm
+Muntiacus,Avg_OP_percent_3km,Cubic,8508.581998467827,0.609875,1.0129524699981771,Muntiacus_Avg_OP_percent_3km_Cubic_2025-01-04_JMS,0.47333647016959923,85,NA,NA,NA,Oil Palm
+Muntiacus,Avg_FLLI_3km,GAM,8611.950060681907,0.3185,0.978188662802982,Muntiacus_Avg_FLLI_3km_GAM_2025-01-04_JMS,NA,NA,NA,NA,NA,Forest Integrity
+Muntiacus,Avg_FLLI_3km,Linear,8117.5781434571845,0.598125,1.0111910915557576,Muntiacus_Avg_FLLI_3km_Linear_2025-01-04_JMS,0.807218554416054,21.1,NA,NA,NA,Forest Integrity
+Muntiacus,Avg_FLLI_3km,Quadratic,8282.088004682853,0.59175,1.0105021815569062,Muntiacus_Avg_FLLI_3km_Quadratic_2025-01-04_JMS,0.9702951481453232,8.3,NA,NA,NA,Forest Integrity
+Muntiacus,Avg_FLLI_3km,Cubic,8265.852517407104,0.59775,1.0114458835293532,Muntiacus_Avg_FLLI_3km_Cubic_2025-01-14_JMS,0.9590982936097251,9.7,NA,NA,NA,Forest Integrity
+Muntiacus,Avg_human_footprint_3km,GAM,8453.052388666769,0.315,0.9767854315242791,Muntiacus_Avg_human_footprint_3km_GAM_2025-01-04_JMS,NA,NA,NA,NA,NA,Human Footprint
+Muntiacus,Avg_human_footprint_3km,Linear,8405.384777070558,0.599375,1.0118948537347066,Muntiacus_Avg_human_footprint_3km_Linear_2025-01-04_JMS,0.6394782074681737,31.1,NA,NA,NA,Human Footprint
+Muntiacus,Avg_human_footprint_3km,Quadratic,8204.661418481555,0.601125,1.0123951888804308,Muntiacus_Avg_human_footprint_3km_Quadratic_2025-01-04_JMS,0.8456862100162712,20.2,NA,NA,NA,Human Footprint
+Muntiacus,Avg_human_footprint_3km,Cubic,8182.882052807808,0.60575,1.0125834900767556,Muntiacus_Avg_human_footprint_3km_Cubic_2025-01-04_JMS,0.951782247290987,13.5,NA,NA,NA,Human Footprint
+Muntiacus,Avg_forest_cover_3km,GAM,8246.52812842586,0.308875,0.9755277302317277,Muntiacus_Avg_forest_cover_3km_GAM_2025-01-04_JMS,NA,NA,NA,NA,NA,Forest Cover
+Muntiacus,Avg_forest_cover_3km,Linear,8227.019756625035,0.616,1.013096581865107,Muntiacus_Avg_forest_cover_3km_Linear_2025-01-04_JMS,-0.4795113479957928,57.3,NA,NA,NA,Forest Cover
+Muntiacus,Avg_forest_cover_3km,Quadratic,8234.5242100241,0.606125,1.0126671413749682,Muntiacus_Avg_forest_cover_3km_Quadratic_2025-01-04_JMS,0.713842668702941,28.5,NA,NA,NA,Forest Cover
+Muntiacus,Avg_forest_cover_3km,Cubic,7940.676636889336,0.592375,1.011221867446585,Muntiacus_Avg_forest_cover_3km_Cubic_2025-01-04_JMS,0.9176794401280167,20.4,NA,NA,NA,Forest Cover

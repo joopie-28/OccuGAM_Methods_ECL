@@ -1,33 +1,65 @@
-species,covariate,model
-Macaca nemestrina,Avg_OP_percent_3km,GAM
-Sus scrofa,Avg_OP_percent_3km,GAM
-Macaca nemestrina,Avg_FLLI_3km,GAM
-Sus scrofa,Avg_FLLI_3km,GAM
-Macaca nemestrina,Avg_human_footprint_3km,GAM
-Sus scrofa,Avg_human_footprint_3km,GAM
-Macaca nemestrina,Avg_forest_cover_3km,GAM
-Sus scrofa,Avg_forest_cover_3km,GAM
-Macaca nemestrina,Avg_OP_percent_3km,Linear
-Sus scrofa,Avg_OP_percent_3km,Linear
-Macaca nemestrina,Avg_FLLI_3km,Linear
-Sus scrofa,Avg_FLLI_3km,Linear
-Macaca nemestrina,Avg_human_footprint_3km,Linear
-Sus scrofa,Avg_human_footprint_3km,Linear
-Macaca nemestrina,Avg_forest_cover_3km,Linear
-Sus scrofa,Avg_forest_cover_3km,Linear
-Macaca nemestrina,Avg_OP_percent_3km,Quadratic
-Sus scrofa,Avg_OP_percent_3km,Quadratic
-Macaca nemestrina,Avg_FLLI_3km,Quadratic
-Sus scrofa,Avg_FLLI_3km,Quadratic
-Macaca nemestrina,Avg_human_footprint_3km,Quadratic
-Sus scrofa,Avg_human_footprint_3km,Quadratic
-Macaca nemestrina,Avg_forest_cover_3km,Quadratic
-Sus scrofa,Avg_forest_cover_3km,Quadratic
-Macaca nemestrina,Avg_OP_percent_3km,Cubic
-Sus scrofa,Avg_OP_percent_3km,Cubic
-Macaca nemestrina,Avg_FLLI_3km,Cubic
-Sus scrofa,Avg_FLLI_3km,Cubic
-Macaca nemestrina,Avg_human_footprint_3km,Cubic
-Sus scrofa,Avg_human_footprint_3km,Cubic
-Macaca nemestrina,Avg_forest_cover_3km,Cubic
-Sus scrofa,Avg_forest_cover_3km,Cubic
+,species,covariate,model
+1,Macaca nemestrina,Avg_OP_percent_3km,GAM
+2,Macaca nemestrina,Avg_OP_percent_3km,Linear
+3,Macaca nemestrina,Avg_OP_percent_3km,Quadratic
+4,Macaca nemestrina,Avg_OP_percent_3km,Cubic
+5,Macaca nemestrina,Avg_FLLI_3km,GAM
+6,Macaca nemestrina,Avg_FLLI_3km,Linear
+7,Macaca nemestrina,Avg_FLLI_3km,Quadratic
+8,Macaca nemestrina,Avg_FLLI_3km,Cubic
+9,Macaca nemestrina,Avg_human_footprint_3km,GAM
+10,Macaca nemestrina,Avg_human_footprint_3km,Linear
+11,Macaca nemestrina,Avg_human_footprint_3km,Quadratic
+12,Macaca nemestrina,Avg_human_footprint_3km,Cubic
+13,Macaca nemestrina,Avg_forest_cover_3km,GAM
+14,Macaca nemestrina,Avg_forest_cover_3km,Linear
+15,Macaca nemestrina,Avg_forest_cover_3km,Quadratic
+16,Macaca nemestrina,Avg_forest_cover_3km,Cubic
+17,Sus scrofa,Avg_OP_percent_3km,GAM
+18,Sus scrofa,Avg_OP_percent_3km,Linear
+19,Sus scrofa,Avg_OP_percent_3km,Quadratic
+20,Sus scrofa,Avg_OP_percent_3km,Cubic
+21,Sus scrofa,Avg_FLLI_3km,GAM
+22,Sus scrofa,Avg_FLLI_3km,Linear
+23,Sus scrofa,Avg_FLLI_3km,Quadratic
+24,Sus scrofa,Avg_FLLI_3km,Cubic
+25,Sus scrofa,Avg_human_footprint_3km,GAM
+26,Sus scrofa,Avg_human_footprint_3km,Linear
+27,Sus scrofa,Avg_human_footprint_3km,Quadratic
+28,Sus scrofa,Avg_human_footprint_3km,Cubic
+29,Sus scrofa,Avg_forest_cover_3km,GAM
+30,Sus scrofa,Avg_forest_cover_3km,Linear
+31,Sus scrofa,Avg_forest_cover_3km,Quadratic
+32,Sus scrofa,Avg_forest_cover_3km,Cubic
+33,Rusa unicolor,Avg_OP_percent_3km,GAM
+34,Rusa unicolor,Avg_OP_percent_3km,Linear
+35,Rusa unicolor,Avg_OP_percent_3km,Quadratic
+36,Rusa unicolor,Avg_OP_percent_3km,Cubic
+37,Rusa unicolor,Avg_FLLI_3km,GAM
+38,Rusa unicolor,Avg_FLLI_3km,Linear
+39,Rusa unicolor,Avg_FLLI_3km,Quadratic
+40,Rusa unicolor,Avg_FLLI_3km,Cubic
+41,Rusa unicolor,Avg_human_footprint_3km,GAM
+42,Rusa unicolor,Avg_human_footprint_3km,Linear
+43,Rusa unicolor,Avg_human_footprint_3km,Quadratic
+44,Rusa unicolor,Avg_human_footprint_3km,Cubic
+45,Rusa unicolor,Avg_forest_cover_3km,GAM
+46,Rusa unicolor,Avg_forest_cover_3km,Linear
+47,Rusa unicolor,Avg_forest_cover_3km,Quadratic
+48,Rusa unicolor,Avg_forest_cover_3km,Cubic
+49,Muntiacus,Avg_OP_percent_3km,GAM
+50,Muntiacus,Avg_OP_percent_3km,Linear
+51,Muntiacus,Avg_OP_percent_3km,Quadratic
+52,Muntiacus,Avg_OP_percent_3km,Cubic
+53,Muntiacus,Avg_FLLI_3km,GAM
+54,Muntiacus,Avg_FLLI_3km,Linear
+55,Muntiacus,Avg_FLLI_3km,Quadratic
+56,Muntiacus,Avg_FLLI_3km,Cubic
+57,Muntiacus,Avg_human_footprint_3km,GAM
+58,Muntiacus,Avg_human_footprint_3km,Linear
+59,Muntiacus,Avg_human_footprint_3km,Quadratic
+60,Muntiacus,Avg_human_footprint_3km,Cubic
+61,Muntiacus,Avg_forest_cover_3km,GAM
+62,Muntiacus,Avg_forest_cover_3km,Linear
+63,Muntiacus,Avg_forest_cover_3km,Quadratic
+64,Muntiacus,Avg_forest_cover_3km,Cubic

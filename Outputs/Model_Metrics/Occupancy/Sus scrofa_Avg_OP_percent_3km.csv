@@ -1,3 +1,5 @@
-Species,Covariate,Model_Type,correlation_GAM,nrmse_GAM,Bayes_P,C_Hat,DIC
-Sus scrofa,Avg_OP_percent_3km,GAM,NA,NA,0.91,1,8238.1
-Sus scrofa,Avg_OP_percent_3km,Linear,1,14.5,0.9,1,8238.24
+Species,Covariate,Model_Type,nrmse_GAM,Bayes_P,C_Hat,LOOIC
+Sus scrofa,Avg_OP_percent_3km,GAM,NA,0.74,1,15284.99
+Sus scrofa,Avg_OP_percent_3km,Linear,16.7,0.84,1.01,15328.12
+Sus scrofa,Avg_OP_percent_3km,Quadratic,38.6,0.9,1,15252.62
+Sus scrofa,Avg_OP_percent_3km,Cubic,48.1,0.78,1,15281.35

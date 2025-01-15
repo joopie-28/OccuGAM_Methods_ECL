@@ -35,8 +35,11 @@ model {
     
     for(j in 1:nsurvey) {
       # Detection probability modeled as a function of sampling effort i.e. camera's - note we remove source here fot ECL data
-      logit(det_prob[i,j]) <- a0 + aEffort * Effort[i, j] #+ aSource[Source[i]]
-      y[i,j] ~ dbin(det_prob[i,j], N[i])
+      logit(det_prob[i,j]) <- lp[i,j]
+      mu.lp[i, j] <- a0 + aEffort * Effort[i, j]
+      
+      lp[i, j] ~ dnorm(mu.lp[i, j], tau.p)
+      y[i,j] ~ dbinom(det_prob[i,j], N[i])
       
       #### Derived Parameters
       #Bayes P-Value
@@ -46,10 +49,10 @@ model {
       Presi.new[i,j] <- (y.new[i,j] - det_prob[i,j])^2  # Calculate squared residual error of simulated data 
      
        # Log likelihood for WAIC 
-      #log_lik0[i, j] <- logdensity.bin(y[i, j], det_prob[i,j], N[i])
+      log_lik0[i, j] <- logdensity.bin(y[i, j], det_prob[i,j], N[i])
     }
     #### get the row log-likelihood
-   # log_lik[i] <- sum(log_lik0[i,])
+    log_lik[i] <- sum(log_lik0[i,])
   }
   
   SSEobs <- sum(Presi[,])     # Calculate the sum of squared residual errors for observed data
@@ -60,6 +63,8 @@ model {
   # the detection process priors
   a0 ~ dnorm(0,0.75)
   aEffort ~ dnorm(0,0.75)
+  tau.p <- pow(sd.p, -2)
+  sd.p ~ dunif(0, 3)
   
   ## Parametric effect priors 
   b[1] ~ dnorm(0,0.75)
@@ -67,6 +72,7 @@ model {
   ## prior for s(covariate), with a maximum spline complexity of 5
   K1 <- S1[1:4,1:4] * lambda_gam[1]  + S1[1:4,5:8] * lambda_gam[2]
   b[2:5] ~ dmnorm(zero[2:5],K1) 
+  
   
   ## smoothing parameter priors CHECK...
   for (k in 1:2) {

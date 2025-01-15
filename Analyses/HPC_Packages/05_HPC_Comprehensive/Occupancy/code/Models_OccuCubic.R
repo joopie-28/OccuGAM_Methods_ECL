@@ -26,14 +26,17 @@ model {
   
   for(i in 1:nsite) {
     # Latent state, b is the intercept + smoothing term, bLandscape is the random effect on the intercept and bYear is the year random effect on the intercept
-    logit(psi[i]) <- b0 + b1 * DisCov[i] + b2 * DisCov2[i] + b3 * DisCov3[i] + bLandscape[Landscape[i]] + bYear[Year[i]]
+    logit(psi[i]) <- inprod(b, DisCov[i,]) + bLandscape[Landscape[i]] + bYear[Year[i]]
     
     # Realised ecological state
     z[i] ~ dbern(psi[i])
     
     for(j in 1:nsurvey) {
       # Detection probability modelled as a function of sampling effort i.e. camera's
-      logit(det_prob[i,j]) <- a0 + aEffort * Effort[i, j] 
+      logit(det_prob[i,j]) <- lp[i,j]
+      mu.lp[i, j] <- a0 + aEffort * Effort[i, j]
+      
+      lp[i, j] ~ dnorm(mu.lp[i, j], tau.p)
       y[i,j] ~ dbern(det_prob[i,j] * z[i])
       
       #### Derived Parameters
@@ -61,9 +64,11 @@ model {
   aEffort ~ dnorm(0,0.75)
   
   ## Parametric effect priors 
-  b0 ~ dnorm(0,0.1) 
-  b1 ~ dnorm(0,0.1) 
-  b2 ~ dnorm(0,0.1)
-  b3 ~ dnorm(0,0.1) 
+  b[1] ~ dnorm(0,0.75) 
+  b[2] ~ dnorm(0,0.75) 
+  b[3] ~ dnorm(0,1)
+  b[4] ~ dnorm(0,1) 
+  tau.p <- pow(sd.p, -2)
+  sd.p ~ dunif(0, 3)
   
 }

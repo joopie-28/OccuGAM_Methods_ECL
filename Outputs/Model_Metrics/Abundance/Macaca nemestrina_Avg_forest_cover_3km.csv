@@ -1,5 +1,5 @@
-Species,Covariate,Model_Type,correlation_GAM,nrmse_GAM,Bayes_P,C_Hat,DIC
-Macaca nemestrina,Avg_forest_cover_3km,GAM,NA,NA,0,0.51,55936.85
-Macaca nemestrina,Avg_forest_cover_3km,Linear,0.66,25.7,0,0.5,56905.16
-Macaca nemestrina,Avg_forest_cover_3km,Quadratic,0.84,13.2,0,0.5,56109.22
-Macaca nemestrina,Avg_forest_cover_3km,Cubic,0.97,6.3,0,0.51,55411.36
+Species,Covariate,Model_Type,nrmse_GAM,Bayes_P,C_Hat,LOOIC
+Macaca nemestrina,Avg_forest_cover_3km,GAM,NA,0.48,1,29660.78
+Macaca nemestrina,Avg_forest_cover_3km,Linear,16.8,0.44,1,29776.93
+Macaca nemestrina,Avg_forest_cover_3km,Quadratic,17.9,0.45,1,29687.73
+Macaca nemestrina,Avg_forest_cover_3km,Cubic,10.7,0.44,1,29635.34

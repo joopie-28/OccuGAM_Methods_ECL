@@ -1,0 +1,5 @@
+Species,Covariate,Model_Type,nrmse_GAM,Bayes_P,C_Hat,LOOIC
+Muntiacus,Avg_OP_percent_3km,GAM,NA,0.55,1,6737.98
+Muntiacus,Avg_OP_percent_3km,Linear,22.3,0.62,1,6732.59
+Muntiacus,Avg_OP_percent_3km,Quadratic,25,0.36,0.94,8824.31
+Muntiacus,Avg_OP_percent_3km,Cubic,43.4,0.41,0.98,6983.55

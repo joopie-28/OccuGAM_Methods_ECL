@@ -3,7 +3,7 @@
 # This version only takes into account landscapes were speceis were detected - 
 # there is NO CONSIDERATION OF SPATIAL RANGE IN THIS VERSION
 
-GenerateUMFList <- function(species, type, w, dur, caps, meta, standardise = F){
+GenerateUMFList <- function(species, type, w, dur, caps, meta, standardise = T){
   
   ## I am using a 100 day duration b/c that's what I used in the co-abundance MS
   
@@ -24,12 +24,19 @@ GenerateUMFList <- function(species, type, w, dur, caps, meta, standardise = F){
     m = as.data.frame(meta[meta$survey_id %in% survs,]) #subset metadata
     
     if(standardise){
+      
+      # We mean center and scale variables of interest to 1 SD
+      
+      m <- m |> 
+        mutate_at(rel.covs, ~(scale(.) |> as.vector()))
+      
+      
       ## standardize site covariates to ensure variables are comparable across models later
-      m.num<- m[,c(sapply(m, is.numeric))]
-      m.std<- decostand(m.num, method = "standardize", na.rm = TRUE)
-      m.std = m.std[,colSums(is.na(m.std)) < nrow(m.std)] #remove any columns with no data
-      m.char<- m[,sapply(m, is.character)]
-      m<- data.frame(m.char, m.std)
+     # m.num<- m[,c(sapply(m, is.numeric))]
+    #  m.std<- decostand(m.num, method = "standardize", na.rm = TRUE)
+    ##  m.std = m.std[,colSums(is.na(m.std)) < nrow(m.std)] #remove any columns with no data
+    #  m.char<- m[,sapply(m, is.character)]
+    #  m<- data.frame(m.char, m.std)
     }
     
     #

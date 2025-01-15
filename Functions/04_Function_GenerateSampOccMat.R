@@ -54,7 +54,7 @@ GenerateSampOccMat <- function(meta, caps){
   caps = t
   
   # garbage collect
-  rm(t, s, s2, res)
+  rm(t, s, s2, res, test_1, test_2)
   
   return(caps)
 }

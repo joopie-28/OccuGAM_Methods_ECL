@@ -1,0 +1,5 @@
+Species,Covariate,Model_Type,nrmse_GAM,Bayes_P,C_Hat,LOOIC
+Muntiacus,Avg_forest_cover_3km,GAM,NA,0.31,0.98,10425.27
+Muntiacus,Avg_forest_cover_3km,Linear,57.3,0.62,1.01,10454.03
+Muntiacus,Avg_forest_cover_3km,Quadratic,28.5,0.61,1.01,10443.11
+Muntiacus,Avg_forest_cover_3km,Cubic,20.4,0.59,1.01,10388.72

@@ -1,0 +1,5 @@
+Species,Covariate,Model_Type,nrmse_GAM,Bayes_P,C_Hat,LOOIC
+Muntiacus,Avg_human_footprint_3km,GAM,NA,0.41,0.99,6809.3
+Muntiacus,Avg_human_footprint_3km,Linear,16.5,0.37,0.97,6852.29
+Muntiacus,Avg_human_footprint_3km,Quadratic,87,0.52,1,6852.71
+Muntiacus,Avg_human_footprint_3km,Cubic,126.6,0.4,1,6753.92

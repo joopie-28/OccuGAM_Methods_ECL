@@ -44,6 +44,12 @@ dPathsCaps <- list.files("/Users/sassen/Dropbox/CT Capture Histories Database/As
 dPathsMeta <- dPathsMeta[(grepl("Luskin", dPathsMeta) | (grepl("Moore", dPathsMeta) & grepl("Ulu_Muda_FR", dPathsMeta))) & !grepl("29_Danum_Valley", dPathsMeta) & !grepl("31_Danum_Valley", dPathsMeta) & !grepl("Ulu_Trusan_2012_Brodie", dPathsMeta)] # Exclude these 2 surveys due to an issue with their camera's
 dPathsCaps <- dPathsCaps[(grepl("Luskin", dPathsCaps) | (grepl("Moore", dPathsCaps) & grepl("Ulu_Muda_FR", dPathsCaps))) & !grepl("29_Danum_Valley", dPathsCaps) & !grepl("31_Danum_Valley", dPathsCaps) & !grepl("Ulu_Trusan_2012_Brodie", dPathsCaps)] # Exclude these 2 surveys due to an issue with their camera's
 
+## TEST MUNTJAK
+# Import the 'ECL' dataset (10 landscapes)
+dPathsMeta <- dPathsMeta[(grepl("Luskin", dPathsMeta)) & !grepl("29_Danum_Valley", dPathsMeta) & !grepl("31_Danum_Valley", dPathsMeta) & !grepl("Ulu_Trusan_2012_Brodie", dPathsMeta)] # Exclude these 2 surveys due to an issue with their camera's
+dPathsCaps <- dPathsCaps[(grepl("Luskin", dPathsCaps)) & !grepl("29_Danum_Valley", dPathsCaps) & !grepl("31_Danum_Valley", dPathsCaps) & !grepl("Ulu_Trusan_2012_Brodie", dPathsCaps)] # Exclude these 2 surveys due to an issue with their camera's
+# TEST MUNTJAK
+
 
 # Loop through paths to import and cleanse data using our custom function
 MetDataList <- list()
@@ -110,7 +116,7 @@ for(i in 1:nrow(meta)){
 }
 
 # Thin the metadata 
-meta <- meta[meta$cams_included_count < 7,]
+meta <- meta[meta$cams_included_count < 7,] # do we need this?
 
 # Thin the captures accordingly!
 caps <- caps[caps$cell_id_3km %in% meta$cell_id_3km,]
@@ -128,13 +134,16 @@ caps = caps[caps$survey_id %in% meta$survey_id,]
 # We mean center and scale variables of interest to 1 SD
 rel.covs <- unique(SpCovDF$covariate)
 
-meta <- meta |> 
-  mutate_at(rel.covs, ~(scale(.) |> as.vector()))
-
 ## 02e. Resolve synonyms and other taxonomic considerations
 
 caps$Species[caps$Species == "Capricornis milneedwardsii"] <- 'Capricornis sumatraensis'
 
+## 02f. Homogenise Muntjak spp. as theyare ecologically similar and it makes more sense to analyse the genus
+
+sort(table(caps$Species[grepl("Munt", caps$Species)])) # ecologicallysimilar species - Muntiacus genus, M. reevesi &  M. muntjak
+
+# combine the species and homogenise to genus
+caps$Species[grepl("Munt", caps$Species)] = "Muntiacus"
 
 # Clean up the environment
 rm(dPathsCaps, dPathsMeta, MetDataList, CapDataList, i, rel.covs,rm, rm2, surv_summary)
@@ -152,7 +161,41 @@ caps <- GenerateSampOccMat(meta = meta,
 ## 04a. Create a spatial version of our metadata so that we can cross-reference with IUCN ranges
 
 # Extract the focal species
-sp.input <- unique(SpCovDF$species) 
+sp.input <- c('Sus scrofa', 'Macaca nemestrina', 'Rusa unicolor', 'Muntiacus')
+#sp.input <- c('Muntiacus')
+
+# Save means and standard deviations for later use in plotting
+sp.standardisation.list <- list()
+for(t in 1:length(sp.input)){ #run this loop for each species
+  sp = (sp.input)[t] # select a single species
+  
+  ### Specify which survey the species has been detected (at least once!)  
+  ## Don't use landscape b/c it could introduce too many zeros for unmarked 
+  survs = unique(caps$survey_id[caps$Species == sp])
+  
+  ## Select relevant surveys
+  c = caps[caps$survey_id %in% survs,] #subset captures
+  m = as.data.frame(meta[meta$survey_id %in% survs,]) #subset metadata
+  
+  # save the standardisation paramerers
+  t1 <- m %>%
+    select(all_of(rel.covs))
+  
+  # Tidy species-specific dataframe
+  t2 <- data.frame(
+    Variable = names(t1),
+    mean = sapply(t1, mean),
+    sd = sapply(t1, sd))
+  
+  # save as list entry
+  sp.standardisation.list[[sp]] <- t2
+}
+
+# Save it for downstream use
+saveRDS(sp.standardisation.list, "Inputs/Plotting/standardisation_params.rds")
+
+# Keep env clean
+rm(sp.standardisation.list, t, t1, t2, c, m, sp, survs)
 
 # Turn the metadata into a (temporary) spatial object with buffers around the polygons
 meta.sf <- st_as_sf(meta,

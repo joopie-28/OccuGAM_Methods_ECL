@@ -4,6 +4,7 @@
 
 model {
   
+
   # There are 2 random effects, we define those here
   
   # Landscape RE hyper priors 
@@ -26,7 +27,8 @@ model {
   
   for(i in 1:nsite) {
     # Latent state (abundance), b is the intercept + smoothing term, bLandscape is the random effect on the intercept and bYear is the year random effect on the intercept
-    log(lambda[i]) <-  b0 + b1 * DisCov[i] + b2 * DisCov2[i] + b3 * DisCov3[i] + bLandscape[Landscape[i]] + bYear[Year[i]]
+  #  log(lambda[i]) <-  b0 + b1 * DisCov[i] + b2 * DisCov2[i] + b3 * DisCov3[i] + bLandscape[Landscape[i]] + bYear[Year[i]]
+    log(lambda[i]) <- inprod(b, DisCov[i,]) + bLandscape[Landscape[i]] + bYear[Year[i]]
     
     # Realised ecological state
     N[i] ~ dpois(lambda[i])
@@ -34,9 +36,11 @@ model {
     
     for(j in 1:nsurvey) {
       # Detection probability modeled as a function of sampling effort i.e. camera's - note we remove source here fot ECL data
-      logit(det_prob[i,j]) <- a0 + aEffort * Effort[i, j] #+ aSource[Source[i]]
-      y[i,j] ~ dbin(det_prob[i,j], N[i])
+      logit(det_prob[i,j]) <- lp[i,j]
+      mu.lp[i, j] <- a0 + aEffort * Effort[i, j]
       
+      lp[i, j] ~ dnorm(mu.lp[i, j], tau.p)
+      y[i,j] ~ dbinom(det_prob[i,j], N[i])
       #### Derived Parameters
       # Bayes P-Value
       
@@ -53,10 +57,10 @@ model {
       Presi.new[i, j] <- pow((y.rep[i, j] - exp[i, j]), 2) / (exp[i, j] + 0.5)
       
       # Log likelihood for WAIC 
-     # log_lik0[i, j] <- logdensity.bin(y[i, j], det_prob[i,j], N[i])
+     log_lik0[i, j] <- logdensity.bin(y[i, j], det_prob[i,j], N[i])
     }
     #### get the row log-likelihood
-   # log_lik[i] <- sum(log_lik0[i,])
+   log_lik[i] <- sum(log_lik0[i,])
   }
   
   SSEobs <- sum(Presi[,])     # Calculate the sum of squared residual errors for observed data
@@ -70,9 +74,11 @@ model {
   
   ## Parametric effect priors 
   
-  b0 ~ dnorm(0,0.75) 
-  b1 ~ dnorm(0,0.75) 
-  b2 ~ dnorm(0,0.75)
-  b3 ~ dnorm(0,0.75)
+  b[1] ~ dnorm(0,0.75) 
+  b[2] ~ dnorm(0,0.75) 
+  b[3] ~ dnorm(0,1)
+  b[4] ~ dnorm(0,1) 
+  tau.p <- pow(sd.p, -2)
+  sd.p ~ dunif(0, 3)
   
 }

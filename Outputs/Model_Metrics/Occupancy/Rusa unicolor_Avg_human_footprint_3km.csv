@@ -1,0 +1,5 @@
+Species,Covariate,Model_Type,nrmse_GAM,Bayes_P,C_Hat,LOOIC
+Rusa unicolor,Avg_human_footprint_3km,GAM,NA,0.36,0.96,8667.95
+Rusa unicolor,Avg_human_footprint_3km,Linear,32.8,0.61,1.02,8655.76
+Rusa unicolor,Avg_human_footprint_3km,Quadratic,19.8,0.66,1.02,8513.08
+Rusa unicolor,Avg_human_footprint_3km,Cubic,136.7,0.68,1.03,9101.38

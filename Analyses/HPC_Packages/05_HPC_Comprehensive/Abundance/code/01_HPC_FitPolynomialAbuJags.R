@@ -39,7 +39,7 @@ date.wrap <- function(string){
 
 # Model fitting
 # Proper version for jagsui which allows parallel computing
-fitabu.HPC <- function(sp.list, covariate,params.to.monitor){
+fitabu.HPC <- function(sp.list, covariate, params.to.monitor, slurm.model.type){
   
   sp <- names(sp.list[1])
   
@@ -53,6 +53,14 @@ fitabu.HPC <- function(sp.list, covariate,params.to.monitor){
   n_survey <- ncol(sp.list[[sp]]@y)
   cov <- sp.list[[sp]]@siteCovs[[covariate]]
   
+  
+  ## TEST
+  
+  poly.degree <- match(slurm.model.type, c("Linear", "Quadratic", "Cubic")) + 1
+  DisCov <- as.matrix(cbind(1, cov, cov^2, cov^3))
+  
+  ## TEST
+  
   # RE params
   Landscape <- as.numeric(sp.list[[sp]]@siteCovs[['Landscape']])
   nLandscape <- length(unique(Landscape))
@@ -64,7 +72,7 @@ fitabu.HPC <- function(sp.list, covariate,params.to.monitor){
   
   Year <- as.numeric(as.factor(stringr::str_extract(sp.list[[sp]]@siteCovs[['survey_id']], 
                                                     stringr::regex("(\\d+)(?!.*\\d)"))))
-  nYear <-length(unique(Year))
+  nYear <- length(unique(Year))
   
   # Observation params
   y <- sp.list[[sp]]@y
@@ -90,9 +98,10 @@ fitabu.HPC <- function(sp.list, covariate,params.to.monitor){
     # Bind all data together in a list for feeding into JAGS
     data_list <- list(
       y = y,
-      DisCov = cov,
-      DisCov2 = cov^2,
-      DisCov3 = cov^3,
+      #DisCov = cov,
+      #DisCov2 = cov^2,
+      #DisCov3 = cov^3,
+      DisCov = DisCov[,1:poly.degree],
       nsite = nsite,
       nsurvey = n_survey,
       nLandscape = nLandscape,
@@ -108,13 +117,15 @@ fitabu.HPC <- function(sp.list, covariate,params.to.monitor){
     my_inits <- function(chain){
       gen_list <- function(chain = chain){
         list(
-          N = apply(y, 1, max, na.rm=T),
+          N = apply(y, 1, max, na.rm=T) + 1,
           a0 = rnorm(1),
           aEffort = rnorm(1),
-          b0 = rnorm(1),
-          b1 = rnorm(1),
-          b2 = rnorm(1),
-          b3 = rnorm(1),
+         # b0 = rnorm(1),
+         # b1 = rnorm(1),
+         # b2 = rnorm(1),
+         # b3 = rnorm(1),
+          b = rnorm(poly.degree,0),
+          sd.p = runif(0, 0.25),
           bLandscape=rnorm(nLandscape),
           sigma.bLandscape= runif(1, 0, 1),
           bYear=rnorm(nYear),
@@ -185,7 +196,7 @@ fitabu.HPC <- function(sp.list, covariate,params.to.monitor){
     my_inits <- function(chain){
       gen_list <- function(chain = chain){
         list(
-          N = apply(y, 1, max, na.rm=T), # maximum count of each site as starting value is best practice
+          N = apply(y, 1, max, na.rm=T) + 1, # maximum count of each site as starting value is best practice
           a0 = rnorm(1),
           aEffort = rnorm(1),
           b = rnorm(
@@ -194,6 +205,7 @@ fitabu.HPC <- function(sp.list, covariate,params.to.monitor){
             0.2
           ),
           bLandscape=rnorm(nLandscape),
+          sd.p = runif(0, 0.25),
           sigma.bLandscape= runif(1, 0, 1),
           bYear=rnorm(nYear),
           sigma.bYear= runif(1, 0, 1),
@@ -230,7 +242,7 @@ fitabu.HPC <- function(sp.list, covariate,params.to.monitor){
   
   
   # fit the model leveraging HPC paraellel computing
-  temp.mod <- jagsUI::jags(data = data_list, inits = my_inits.val,
+  temp.mod <- jagsUI::jags(data = data_list, inits = my_inits.val,modules=c('glm'),
                            n.chains = nc, n.adapt = na, n.iter=ni,parallel = T, 
                            n.thin=nt, n.burnin = nb, parameters.to.save = params.to.monitor,
                            model.file = slurm.model)
@@ -247,7 +259,8 @@ fitabu.HPC <- function(sp.list, covariate,params.to.monitor){
   model.outputs <- list('Species' = sp,
                         'Data_List' = data_list,
                         'Full_model' = temp.mod,
-                        'LogLik' = mcmc_loglik)
+                        'LogLik' = mcmc_loglik,
+                        'poly' = poly.degree)
   return(model.outputs)
   
 } 
@@ -264,7 +277,8 @@ DrawPosteriorJAGS.HPC <- function(JAGS_model, sp.list, covariate){
   cov[is.na(cov)] <- min(cov, na.rm=T) # need to make sure we re-account for NAs as not carried over from model fitting.
   
   # Create new data for Polynomials
-  newdat <- data.frame('DisCov' =  seq(min(cov), max(cov), length.out = 1000)) |>
+  newdat <- data.frame('Intercept' = rep(1,1000),
+                       'DisCov' =  seq(min(cov), max(cov), length.out = 1000)) |>
     mutate('DisCov2' = DisCov^2,
            'DisCov3' = DisCov^3)
   
@@ -285,17 +299,15 @@ DrawPosteriorJAGS.HPC <- function(JAGS_model, sp.list, covariate){
   # Get Model predictions from the MCMC output
   
   # Will calculate this for GAMs as well but we will not use it, so it is OK
-  intercept <- do.call(rbind, replicate(nrow(newdat), t(mod_mcmc[,1]), simplify = FALSE))
+  
   
   # Remember to comment this out properly
-  ifelse(grepl("cubic", slurm.model, ignore.case = TRUE),
-                    tmp_est <- exp(intercept + (as.matrix(newdat[c('DisCov', 'DisCov2', 'DisCov3')]) %*% t(mod_mcmc[,2:4]))), 
-                    ifelse(grepl("quadratic", slurm.model, ignore.case = TRUE),
-                           tmp_est <- exp(intercept + (as.matrix(newdat[c('DisCov', 'DisCov2')])) %*% t(mod_mcmc[,2:3])),
-                           ifelse(grepl("linear", slurm.model, ignore.case = TRUE), 
-                                  tmp_est <- exp(intercept + (as.matrix(newdat[c('DisCov')])) %*% t(mod_mcmc[,2])),
-                                  # GAM approach
-                                  tmp_est <- exp((newdat_lp %*% t(mod_mcmc[,1:5]))))))
+  
+  poly.degree <- JAGS_model$poly 
+  ifelse(!grepl("GAM", slurm.model, ignore.case = TRUE),
+      tmp_est<-exp(as.matrix(newdat[,1:poly.degree]) %*% t(mod_mcmc[,1:poly.degree])),
+      # GAM approach
+      tmp_est <- exp((newdat_lp %*% t(mod_mcmc[,1:5]))))
   
   # Make sure we get the full intervals
   tmp_est_df <- as.data.frame(t(apply(tmp_est, 1, 
@@ -355,15 +367,19 @@ slurm.model.type <-SpCovDF[slurm, 'model']  #'GAM', 'LINEAR', ETC
 slurm.model <- paste0('code/Models_Abu',slurm.model.type,'.R')  
 
 # Parameter list to save for models
-ifelse(slurm.model.type == 'GAM', 
-          params.to.monitor <- 'b', 
-                            ifelse(slurm.model.type == 'Cubic', 
-                                   params.to.monitor <- c('b0', 'b1', 'b2', 'b3'),
-                                                                   ifelse(slurm.model.type == 'Quadratic', 
-                                                                          params.to.monitor <-c('b0', 'b1', 'b2'),
-                                                                          params.to.monitor <-c('b0', 'b1'))))
-params.to.monitor <- c(params.to.monitor,c( 'a0', 'aEffort', 'bLandscape', 'var.bLandscape','bYear','SSEobs', 'SSEsim', 'p.val', 'c.hat'))
-                       
+#ifelse(slurm.model.type == 'GAM', 
+#          params.to.monitor <- 'b', 
+#                            ifelse(slurm.model.type == 'Cubic', 
+#                                   params.to.monitor <- c('b0', 'b1', 'b2', 'b3'),
+#                                                                  ifelse(slurm.model.type == 'Quadratic', 
+#                                                                          params.to.monitor <-c('b0', 'b1', 'b2'),
+#                                                                          params.to.monitor <-c('b0', 'b1'))))
+
+#params.to.monitor <- c(params.to.monitor,c('a0', 'aEffort', 'bLandscape', 'var.bLandscape','bYear','SSEobs', 'SSEsim', 'p.val', 'c.hat'))
+params.to.monitor <- c('b' , 'a0', 'aEffort', 'bLandscape', 'var.bLandscape','bYear','SSEobs', 'SSEsim', 'p.val', 'c.hat', 'log_lik')
+
+
+                    
 # read in umf.list
 umf.list.abu <- readRDS("data/umflistabu.rds")
 
@@ -376,7 +392,7 @@ sp.list <- umf.list.abu[sp]
 start = Sys.time()
 
 # Model fitting
-mod <- fitabu.HPC(sp.list, covariate, params.to.monitor)
+mod <- fitabu.HPC(sp.list, covariate, params.to.monitor,slurm.model.type)
 
 # Extract all the necessary parameters
 mod.extract <- DrawPosteriorJAGS.HPC(mod, sp.list, covariate)
@@ -408,7 +424,7 @@ threshold_mod_summary[slurm, 'modname'] <- modname
 saveRDS(threshold_mod_summary, paste0('results/ABU_RDS/', covariate ,"/", modname,'_mod_summary.rds'))
 
 ### Saving the logliks for post-processing
-#saveRDS(mod$Loglik, paste0('results/LogLiks/', covariate ,"/", modname,'_LogLiks.rds'))
+saveRDS(mod$LogLik, paste0('results/LogLiks/', covariate ,"/", modname,'_LogLiks.rds'))
 
 # Plotting output
 
