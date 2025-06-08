@@ -41,7 +41,7 @@ auto.legend.pos <- function(x,y,xlim=NULL,ylim=NULL) {
 }
 
 # Specify the results folder
-result.folder <- "/Users/sassen/Desktop/05_HPC_Comprehensive" # change to dropbox
+result.folder <- "/Users/sassen/Dropbox/Joop MSc QBIO project/Joop OccuGAMs methods paper/OccuGAMs Methods - Results/Wildlife Case Sudies/05_HPC_Comprehensive" # change to dropbox
 
 # Load in covariates
 covariates <- c('Avg_FLLI_3km', 'Avg_forest_cover_3km',
@@ -541,9 +541,10 @@ noGAM<-full.abu.mod.summary[full.abu.mod.summary$Model_Type != 'GAM', ]
 
 pdf('Outputs/Main Figures/Fig2.pdf', width = 12, height =7.5)
 ggplot(aes(y=nrmse_GAM, x=fct_relevel(cov_name, "Forest Integrity","Forest Cover","Human Footprint", "Oil Palm"), fill = Model_Type), 
-       data=noGAM) + facet_wrap(~Species) +
+       data=noGAM) + facet_wrap(~fct_relevel(Species, 'Macaca nemestrina', 'Sus scrofa','Rusa unicolor', 'Muntiacus'),
+                                             scales="free_y") +
   geom_bar(stat = "identity", 
-           position = "dodge",color = "black", size = 0.5)  + ylim(0,200) +
+           position = "dodge",color = "black", size = 0.5)  +
   theme_classic() + scale_fill_manual(values = c("Linear" = "green3", 
                                                  "Quadratic" = "steelblue",
                                                  "Cubic" = 'purple')) +
@@ -557,6 +558,47 @@ ggplot(aes(y=nrmse_GAM, x=fct_relevel(cov_name, "Forest Integrity","Forest Cover
     axis.text = element_text(size=12))
 
 dev.off()
+
+library(dplyr)
+library(ggplot2)
+library(forcats)
+
+# Add dummy y-limit values by species
+noGAM <- noGAM %>%
+  mutate(y_limit = ifelse(Species %in% c('Macaca nemestrina', 'Sus scrofa'), 30, 200))
+
+pdf('Outputs/Main Figures/Fig2.pdf', width = 12, height =7.5)
+# Plot with geom_blank to force custom y-limits
+ggplot(aes(
+  y = nrmse_GAM,
+  x = fct_relevel(cov_name, "Forest Integrity", "Forest Cover", "Human Footprint", "Oil Palm"),
+  fill = Model_Type
+), data = noGAM) +
+  facet_wrap(~fct_relevel(Species, 'Macaca nemestrina', 'Sus scrofa', 'Rusa unicolor', 'Muntiacus'),
+             scales = "free_y", nrow = 2) +
+  geom_bar(stat = "identity", position = "dodge", color = "black", size = 0.5) +
+  geom_blank(aes(y = y_limit)) +  # dummy geom to set y-limits
+  theme_classic() +
+  scale_fill_manual(values = c("Linear" = "green3",
+                               "Quadratic" = "steelblue",
+                               "Cubic" = 'purple')) +
+  xlab('Covariate') +
+  labs(fill = 'Model') +
+  ylab('Difference from GAM (NRMSE)') +
+  theme(
+    panel.border = element_rect(color = "black", size = 1, fill = NA),
+    strip.background = element_rect(color = "black", size = 1),
+    strip.text = element_text(size = 16),
+    axis.title = element_text(size = 14),
+    axis.text = element_text(size = 12)
+  )
+dev.off()
+
+
+
+
+
+
 
 ############################
 ########## Supplementary Figures
@@ -779,6 +821,21 @@ ggplot(aes(y=C_Hat, x=fct_relevel(Model_Type, "GAM", "Linear", "Quadratic", "Cub
 
 dev.off()
 
+##### Table of PPC for occu (3A)
+
+full.occu.mod.summary |>
+  mutate(Model = paste0(Species, "~", Covariate ),
+         Type = 'Occupancy',
+         Bayes_P = round(Bayes_P, 3),
+         C_Hat = round(C_Hat, 3)) |>
+  select(Model,
+         Type,
+         Formulation = Model_Type,
+         `Bayesian P-value` = Bayes_P,
+         `C-Hat` = C_Hat,
+         NRMSE = nrmse_GAM) |>
+  write.csv("/Users/sassen/OccuGAM_Methods_ECL/Outputs/Main Results/OccuOutputTable.csv")
+
 #### Figure S7
 # Posterior Predictive Checks for Abundance models
 
@@ -804,6 +861,22 @@ ggplot(aes(y=Bayes_P, x=fct_relevel(Model_Type, "GAM", "Linear", "Quadratic", "C
     axis.text = element_text(size=12))  # Adds a box around the facet labels
 
 dev.off()
+
+##### Table of PPC for Abundance (3A)
+
+full.abu.mod.summary |>
+  mutate(Model = paste0(Species, "~", Covariate ),
+         Type = 'N-Mixture',
+         Bayes_P = round(Bayes_P, 3),
+         C_Hat = round(C_Hat, 3)) |>
+  select(Model,
+         Type,
+         Formulation = Model_Type,
+         `Bayesian P-value` = Bayes_P,
+         `C-Hat` = C_Hat,
+         NRMSE = nrmse_GAM) |>
+  write.csv("/Users/sassen/OccuGAM_Methods_ECL/Outputs/Main Results/AbundanceOutputTable.csv")
+
 
 # B - C-hat
 pdf('Outputs/Main Figures/Fig3B.pdf', width = 12, height =7.5)

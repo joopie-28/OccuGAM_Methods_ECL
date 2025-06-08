@@ -1,0 +1,65 @@
+"","Model","Type","Formulation","Bayesian P-value","C-Hat","NRMSE"
+"1","Macaca nemestrina~Avg_OP_percent_3km","N-Mixture","GAM",0.498,1,NA
+"2","Macaca nemestrina~Avg_OP_percent_3km","N-Mixture","Linear",0.438,0.996,1
+"3","Macaca nemestrina~Avg_OP_percent_3km","N-Mixture","Quadratic",0.44,0.996,13.5
+"4","Macaca nemestrina~Avg_OP_percent_3km","N-Mixture","Cubic",0.43,0.995,12.8
+"5","Macaca nemestrina~Avg_FLLI_3km","N-Mixture","GAM",0.511,1,NA
+"6","Macaca nemestrina~Avg_FLLI_3km","N-Mixture","Linear",0.43,0.995,8
+"7","Macaca nemestrina~Avg_FLLI_3km","N-Mixture","Quadratic",0.346,0.985,10.8
+"8","Macaca nemestrina~Avg_FLLI_3km","N-Mixture","Cubic",0.328,0.98,9.7
+"9","Macaca nemestrina~Avg_human_footprint_3km","N-Mixture","GAM",0.499,1,NA
+"10","Macaca nemestrina~Avg_human_footprint_3km","N-Mixture","Linear",0.446,0.997,19.7
+"11","Macaca nemestrina~Avg_human_footprint_3km","N-Mixture","Quadratic",0.45,0.997,13.2
+"12","Macaca nemestrina~Avg_human_footprint_3km","N-Mixture","Cubic",0.453,0.997,16.1
+"13","Macaca nemestrina~Avg_forest_cover_3km","N-Mixture","GAM",0.48,0.999,NA
+"14","Macaca nemestrina~Avg_forest_cover_3km","N-Mixture","Linear",0.437,0.996,16.8
+"15","Macaca nemestrina~Avg_forest_cover_3km","N-Mixture","Quadratic",0.453,0.997,17.9
+"16","Macaca nemestrina~Avg_forest_cover_3km","N-Mixture","Cubic",0.442,0.996,10.7
+"17","Sus scrofa~Avg_OP_percent_3km","N-Mixture","GAM",0.678,1.006,NA
+"18","Sus scrofa~Avg_OP_percent_3km","N-Mixture","Linear",0.444,0.997,20.4
+"19","Sus scrofa~Avg_OP_percent_3km","N-Mixture","Quadratic",0.447,0.997,3.1
+"20","Sus scrofa~Avg_OP_percent_3km","N-Mixture","Cubic",0.454,0.997,8.7
+"21","Sus scrofa~Avg_FLLI_3km","N-Mixture","GAM",0.688,1.007,NA
+"22","Sus scrofa~Avg_FLLI_3km","N-Mixture","Linear",0.443,0.996,8
+"23","Sus scrofa~Avg_FLLI_3km","N-Mixture","Quadratic",0.434,0.996,4.1
+"24","Sus scrofa~Avg_FLLI_3km","N-Mixture","Cubic",0.446,0.996,11.6
+"25","Sus scrofa~Avg_human_footprint_3km","N-Mixture","GAM",0.679,1.007,NA
+"26","Sus scrofa~Avg_human_footprint_3km","N-Mixture","Linear",0.43,0.996,12.5
+"27","Sus scrofa~Avg_human_footprint_3km","N-Mixture","Quadratic",0.436,0.996,5.8
+"28","Sus scrofa~Avg_human_footprint_3km","N-Mixture","Cubic",0.341,0.985,12
+"29","Sus scrofa~Avg_forest_cover_3km","N-Mixture","GAM",0.675,1.007,NA
+"30","Sus scrofa~Avg_forest_cover_3km","N-Mixture","Linear",0.455,0.997,4.2
+"31","Sus scrofa~Avg_forest_cover_3km","N-Mixture","Quadratic",0.454,0.997,3.3
+"32","Sus scrofa~Avg_forest_cover_3km","N-Mixture","Cubic",0.458,0.997,1.4
+"33","Rusa unicolor~Avg_OP_percent_3km","N-Mixture","GAM",0.303,0.972,NA
+"34","Rusa unicolor~Avg_OP_percent_3km","N-Mixture","Linear",0.629,1.019,25.8
+"35","Rusa unicolor~Avg_OP_percent_3km","N-Mixture","Quadratic",0.624,1.018,14.3
+"36","Rusa unicolor~Avg_OP_percent_3km","N-Mixture","Cubic",0.627,1.019,6.7
+"37","Rusa unicolor~Avg_FLLI_3km","N-Mixture","GAM",0.304,0.972,NA
+"38","Rusa unicolor~Avg_FLLI_3km","N-Mixture","Linear",0.623,1.019,31.3
+"39","Rusa unicolor~Avg_FLLI_3km","N-Mixture","Quadratic",0.631,1.019,9.8
+"40","Rusa unicolor~Avg_FLLI_3km","N-Mixture","Cubic",0.619,1.018,20.3
+"41","Rusa unicolor~Avg_human_footprint_3km","N-Mixture","GAM",0.297,0.972,NA
+"42","Rusa unicolor~Avg_human_footprint_3km","N-Mixture","Linear",0.625,1.018,21.9
+"43","Rusa unicolor~Avg_human_footprint_3km","N-Mixture","Quadratic",0.631,1.019,100.4
+"44","Rusa unicolor~Avg_human_footprint_3km","N-Mixture","Cubic",0.631,1.019,188.6
+"45","Rusa unicolor~Avg_forest_cover_3km","N-Mixture","GAM",0.312,0.973,NA
+"46","Rusa unicolor~Avg_forest_cover_3km","N-Mixture","Linear",0.633,1.02,23.7
+"47","Rusa unicolor~Avg_forest_cover_3km","N-Mixture","Quadratic",0.63,1.02,36.2
+"48","Rusa unicolor~Avg_forest_cover_3km","N-Mixture","Cubic",0.631,1.02,82.3
+"49","Muntiacus~Avg_OP_percent_3km","N-Mixture","GAM",0.312,0.977,NA
+"50","Muntiacus~Avg_OP_percent_3km","N-Mixture","Linear",0.61,1.012,9.7
+"51","Muntiacus~Avg_OP_percent_3km","N-Mixture","Quadratic",0.611,1.013,17.9
+"52","Muntiacus~Avg_OP_percent_3km","N-Mixture","Cubic",0.61,1.013,85
+"53","Muntiacus~Avg_FLLI_3km","N-Mixture","GAM",0.318,0.978,NA
+"54","Muntiacus~Avg_FLLI_3km","N-Mixture","Linear",0.598,1.011,21.1
+"55","Muntiacus~Avg_FLLI_3km","N-Mixture","Quadratic",0.592,1.011,8.3
+"56","Muntiacus~Avg_FLLI_3km","N-Mixture","Cubic",0.598,1.011,9.7
+"57","Muntiacus~Avg_human_footprint_3km","N-Mixture","GAM",0.315,0.977,NA
+"58","Muntiacus~Avg_human_footprint_3km","N-Mixture","Linear",0.599,1.012,31.1
+"59","Muntiacus~Avg_human_footprint_3km","N-Mixture","Quadratic",0.601,1.012,20.2
+"60","Muntiacus~Avg_human_footprint_3km","N-Mixture","Cubic",0.606,1.013,13.5
+"61","Muntiacus~Avg_forest_cover_3km","N-Mixture","GAM",0.309,0.976,NA
+"62","Muntiacus~Avg_forest_cover_3km","N-Mixture","Linear",0.616,1.013,57.3
+"63","Muntiacus~Avg_forest_cover_3km","N-Mixture","Quadratic",0.606,1.013,28.5
+"64","Muntiacus~Avg_forest_cover_3km","N-Mixture","Cubic",0.592,1.011,20.4
