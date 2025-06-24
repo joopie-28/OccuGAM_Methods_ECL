@@ -578,7 +578,5 @@ p <- ggplot(
 
 print(p)
 
-
 dev.off()
-
 
