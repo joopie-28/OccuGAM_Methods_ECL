@@ -22,4 +22,11 @@ The camera trap data used in this analysis was prepared using a multi-step data 
 
 To learn more about this camera trap data standardization pipeline, please contact Zachary Amir or Matthew Luskin to request access to the Asian Capture Histories GitHub Repository.
 
+## **Repository Structure**
+
+The repository is organised into 5 main folders, of which the folders **Analyses**, **Functions**, **Inputs** are the 3 folders strictly required to reproduce all analyses. The folder **Outputs** contains the majority of results including plots and model summaries.
+
+# `Analyses/HPC_Packages` contains completed code and data packages that were sent/can be sent to a HPC environment. 
+- `Analyses/HPC_Packages/05_HPC_Comprehensive` contains all code, data, and results for the case study portion of the paper. This comprises fitting linear, quadratic, cubic and GAM occupancy and n-mixture models for 4 species of tropical mammals (*Sus scrofa*, *Rusa unicolor*, *Macaca nemestrina*, genus *Muntiacus*).
+
 
