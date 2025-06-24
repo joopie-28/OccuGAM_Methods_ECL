@@ -53,3 +53,10 @@ The `Outputs/` subfolder contains all study results.
 - `Outputs/Simulations` contains the simulation study graphs (Fig. 1-2). These are modular and were stitched together as single graphs in powerpoint.
 - `Outputs/UMF.List` contains the unmarkedFrame data files (see Data Preparation)
 
+## **OccuGAM model code in JAGS and STAN**
+- In order to help academic and applied ecologists alike, we provide clear model code extracts to integrate penalised splines into both occupancy and n-mixture models in both JAGS and STAN. 
+- We are only aware of prior use of this approach in occupancy models (i.e. not abundance/n-mixture) and JAGS (i.e. not STAN)
+- Our hope is that this will facilitate greater model uptake, particularly in (relative) abundance estimation, given the benefits compared to polynomials.
+- `ModelCodeTemplates/JAGS` contains the code to run occupancy and n-mixture models in JAGS. We note that this code is dependent on packages such as `mgcv` and for initial set-up. We refer the user to the `Analyses/HPC_Packages/05_HPC_Comprehensive/Abundance/code/01_HPC_FitPolynomialAbuJags.R` file if they wish to understand this further.
+- `ModelCodeTemplates/STAN` contains the code to run n-mixture models in STAN. We note that this code is dependent on packages such as `mgcv` and for initial set-up. We also point the user to the `flocker` and `mvgam` r packages, which we used to construct the STAN models. They offer an intuitive formula-based interface to STAN and provide an easy entry point.
+
