@@ -26,7 +26,30 @@ To learn more about this camera trap data standardization pipeline, please conta
 
 The repository is organised into 5 main folders, of which the folders **Analyses**, **Functions**, **Inputs** are the 3 folders strictly required to reproduce all analyses. The folder **Outputs** contains the majority of results including plots and model summaries.
 
-# `Analyses/HPC_Packages` contains completed code and data packages that were sent/can be sent to a HPC environment. 
-- `Analyses/HPC_Packages/05_HPC_Comprehensive` contains all code, data, and results for the case study portion of the paper. This comprises fitting linear, quadratic, cubic and GAM occupancy and n-mixture models for 4 species of tropical mammals (*Sus scrofa*, *Rusa unicolor*, *Macaca nemestrina*, genus *Muntiacus*).
+### 0. Functions and Pre-Requisites
+- Functions are stored separately in this repository, and are called at the start of each separate script to promote readability and modularity of code. The only exception is in the HPC Packages, as these require all code to be bundled.
+- All functions are stored in the `Functions/` subfolder.
 
+### 1. Data preparation
+- `Analyses/R/01_Analysis_CreateDataBundles.R` contains all code to generate count and detection history matrices from ECL camera trap data. The outputs are in the 'unmarkedFrame' format which conveniently stores all relevant detections and covariates. These processed files are stored in the `Outputs/UMF.List` subfolder. A copy of these umf.list is also stored in the HPC packages (see Model Fitting on the HPC environment).
+- `Analyses/Simulations/02_Simulations_BuildSimFramework.R` contains all code to simulate 2,400 datasets for the simulation portion of the study. We note that there is a stochastic component to this and thus newly simulated datasets will deviate from the ones produced in this work. The simulated dataset used to fit models for this paper is included in the HPC packages (see Model Fitting on the HPC environment).
+
+### 2. Model Fitting on the HPC environment
+- `Analyses/HPC_Packages` contains completed code and data packages that were sent/can be sent to a HPC environment. 
+- `Analyses/HPC_Packages/05_HPC_Comprehensive` contains all code, data, and results for the case study portion of the paper. This comprises fitting linear, quadratic, cubic and GAM occupancy and n-mixture models for 4 species of tropical mammals (*Sus scrofa*, *Rusa unicolor*, *Macaca nemestrina*, genus *Muntiacus*).
+- `Analyses/HPC_Packages/06_HPC_Simulations` contains all code, data, and results for the simulation portion of the paper. This comprises fitting linear, quadratic, cubic and GAM occupancy and n-mixture models to 2,400 different scenario datasets.
+
+### 3. Analysing and visualising results
+Visualising of results was performed on a local device and required extracting the key parameters and information from the HPC_packages. 
+- `Analyses/R/03_Process_Results.R` contains all code to produce the tables and graphs from the case study portion of the manuscript. The resulting artefacts are stored in `Outputs/`. 
+- `Analyses/Simulations/03_Process_Simulation_Results.R` contains all code to produce the tables and graphs from the simulation portion of the manuscript. The resulting artefacts are stored in `Outputs/`. 
+
+### 4. Final results and figures
+The `Outputs/` subfolder contains all study results.
+- `Outputs/Abundance_Plots` contains the habitat association graphs (Fig. 3, Fig S1-S3 in main report). These are modular and were stitched together as a single graph in powerpoint. It includes both occupancy and abundance plots.
+- `Outputs/LOO Performance Plots` contains the predictive performance graphs as measured by the ELPD (Fig. 4, Fig S5).
+- `Outputs/Main Figures` contains the NRMSE graphs (Fig. 5, Fig S4).
+- `Outputs/Main Results` contains the model PPE tables (Table. S1-S2).
+- `Outputs/Simulations` contains the simulation study graphs (Fig. 1-2). These are modular and were stitched together as single graphs in powerpoint.
+- `Outputs/UMF.List` contains the unmarkedFrame data files (see Data Preparation)
 
