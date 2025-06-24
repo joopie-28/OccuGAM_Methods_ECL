@@ -15,9 +15,11 @@ Methods paper comparing OccuGAMs, AbuGAMs and conventional models for estimation
 This GitHub repository includes all code to implement the analyses featured in Sassen et al.'s OccuGAMs analysis, which comprises a comparison of polynomial and penalised spline (i.e. GAM) approaches to modelling non-linear responses to disturbance covariates. The repository also includes additional annotated code templates to implement 'OccuGAMs' in both STAN and JAGS.
 
 The repository contains 2 types of scripts:
--**R scripts** consitute the majority of scripts. They are used to i) process data into formats suitable for modelling, ii) create simulated datasets, iii) Fit models to data - we fit 1000s of complex models utilising a High Performance Computing cluster [(HPC)](https://rcc.uq.edu.au/systems/high-performance-computing/bunya) and iv) Gather processed models from HPC cluster and visualise the results.
--**SLURM scripts** are used for batch processing of analyses on the HPC environment.
+- **R scripts** consitute the majority of scripts. They are used to i) process data into formats suitable for modelling, ii) create simulated datasets, iii) Fit models to data - we fit 1000s of complex models utilising a High Performance Computing cluster [(HPC)](https://rcc.uq.edu.au/systems/high-performance-computing/bunya) and iv) Gather processed models from HPC cluster and visualise the results.
+- **SLURM scripts** are used for batch processing of analyses on the HPC environment.
 
+The camera trap data used in this analysis was prepared using a multi-step data cleaning pipeline that is backed up on GitHub but is currently private due to data-sharing agreements with our collaborators. The dataset provided in this repository has been de-identified, with all latitude and longitude coordinates removed to protect sampling locations.
 
+To learn more about this camera trap data standardization pipeline, please contact Zachary Amir or Matthew Luskin to request access to the Asian Capture Histories GitHub Repository.
 
 
