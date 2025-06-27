@@ -376,7 +376,7 @@ dev.off()
 
 #### Create an example plot from our real simulated datasets
 
-simdat <- readRDS("/Users/sassen/Desktop/06_HPC_Simulations/data/SimulationInputData.rds") 
+simdat <- readRDS("/Users/sassen/Dropbox/Joop MSc QBIO project/Joop OccuGAMs methods paper/OccuGAMs Methods - Results/Simulation Study/06_HPC_Simulations/data/SimulationInputData.rds") 
 
 # Select a random dataset from the monotonic scenarios
 simdat.ex <- simdat[[9]][[5]]
@@ -476,7 +476,7 @@ full.mod.list<- lapply(list('linear', 'quadratic', 'cubic', 'GAM'), FUN = functi
 
 names(full.mod.list) <- c('linear', 'quadratic', 'cubic', 'GAM')
 
-## Plot the example
+## Plot the examples
 curves.linear <- mvgam::predictions(
   full.mod.list$linear,
   newdata = datagrid(covariate = seq(-2, 2, length.out = 100)),
@@ -553,7 +553,7 @@ p <-  ggplot() +
 print(p)
 dev.off()
 
-pdf('Outputs/Simulations/NonMonoCurve.pdf', height= 5, width = 7)
+pdf('Outputs/Simulations/NonMonoCurve.pdf', height = 5, width = 7)
 
 cov <- seq(-2, 2, length.out = 1000)
 p <- ggplot(

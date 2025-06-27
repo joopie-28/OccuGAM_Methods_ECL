@@ -24,7 +24,7 @@ To learn more about this camera trap data standardization pipeline, please conta
 
 ## **Repository Structure**
 
-The repository is organised into 5 main folders, of which the folders **Analyses**, **Functions**, **Inputs** are the 3 folders strictly required to reproduce all analyses. The folder **Outputs** contains the majority of results including plots and model summaries.
+The repository is organised into 5 main folders, of which the folders **Analyses**, **Functions**, **Inputs** are the 3 folders strictly required to reproduce all analyses. The folder **Outputs** contains the majority of results including plots and model summaries. **ModelTemplates** contains example code in JAGS and STAN for integrating penalised splines in occupancy and n-mixture models.
 
 ### 0. Functions and Pre-Requisites
 - Functions are stored separately in this repository, and are called at the start of each separate script to promote readability and modularity of code. The only exception is in the HPC Packages, as these require all code to be bundled.
@@ -58,5 +58,5 @@ The `Outputs/` subfolder contains all study results.
 - We are only aware of prior use of this approach in occupancy models (i.e. not abundance/n-mixture) and JAGS (i.e. not STAN)
 - Our hope is that this will facilitate greater model uptake, particularly in (relative) abundance estimation, given the benefits compared to polynomials.
 - `ModelCodeTemplates/JAGS` contains the code to run occupancy and n-mixture models in JAGS. We note that this code is dependent on packages such as `mgcv` and for initial set-up. We refer the user to the `Analyses/HPC_Packages/05_HPC_Comprehensive/Abundance/code/01_HPC_FitPolynomialAbuJags.R` file if they wish to understand this further.
-- `ModelCodeTemplates/STAN` contains the code to run n-mixture models in STAN. We note that this code is dependent on packages such as `mgcv` and for initial set-up. We also point the user to the `flocker` and `mvgam` r packages, which we used to construct the STAN models. They offer an intuitive formula-based interface to STAN and provide an easy entry point.
+- `ModelCodeTemplates/STAN` contains the code to run n-mixture models in STAN. We note that this code is dependent on packages such as `mgcv` and for initial set-up. We also point the user to the `mvgam` r package, which we used to construct the STAN n-mixture models, and the `Flocker` r package for occupancy modelling. They offer an intuitive formula-based interface to STAN and provide an easy entry point.
 
