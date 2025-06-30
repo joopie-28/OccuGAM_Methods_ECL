@@ -41,7 +41,7 @@ auto.legend.pos <- function(x,y,xlim=NULL,ylim=NULL) {
 }
 
 # Specify the results folder
-result.folder <- "/Users/sassen/Dropbox/Joop MSc QBIO project/Joop OccuGAMs methods paper/OccuGAMs Methods - Results/Wildlife Case Sudies/05_HPC_Comprehensive" # change to dropbox
+result.folder <- "/Users/sassen/Dropbox/Joop MSc QBIO project/Joop OccuGAMs methods paper/OccuGAMs Methods - Results/Wildlife Case Sudies/05_HPC_Comprehensive" 
 
 # Load in covariates
 covariates <- c('Avg_FLLI_3km', 'Avg_forest_cover_3km',

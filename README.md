@@ -2,7 +2,7 @@
 
 ![screenshot](Imagery/HeaderImage.png)
 
-## Last updated: June 24th, 2025
+## Last updated: June 30th, 2025
 
 [![GitHub Pages](https://img.shields.io/badge/GitHub-Pages-blue?logo=github)](https://github.com/joopie-28/OccuGAM_Methods_ECL)
 
@@ -36,8 +36,8 @@ The repository is organised into 5 main folders, of which the folders **Analyses
 
 ### 2. Model Fitting on the HPC environment
 - `Analyses/HPC_Packages` contains completed code and data packages that were sent/can be sent to a HPC environment. 
-- `Analyses/HPC_Packages/05_HPC_Comprehensive` contains all code, data, and results for the case study portion of the paper. This comprises fitting linear, quadratic, cubic and GAM occupancy and n-mixture models for 4 species of tropical mammals (*Sus scrofa*, *Rusa unicolor*, *Macaca nemestrina*, genus *Muntiacus*).
-- `Analyses/HPC_Packages/06_HPC_Simulations` contains all code, data, and results for the simulation portion of the paper. This comprises fitting linear, quadratic, cubic and GAM occupancy and n-mixture models to 2,400 different scenario datasets.
+- `Analyses/HPC_Packages/05_HPC_Comprehensive` contains all code, data for the case study portion of the paper. This comprises fitting linear, quadratic, cubic and GAM occupancy and n-mixture models for 4 species of tropical mammals (*Sus scrofa*, *Rusa unicolor*, *Macaca nemestrina*, genus *Muntiacus*).
+- `Analyses/HPC_Packages/06_HPC_Simulations` contains all code, data for the simulation portion of the paper. This comprises fitting linear, quadratic, cubic and GAM occupancy and n-mixture models to 2,400 different scenario datasets.
 
 ### 3. Analysing and visualising results
 Visualising of results was performed on a local device and required extracting the key parameters and information from the HPC_packages. 
@@ -45,7 +45,7 @@ Visualising of results was performed on a local device and required extracting t
 - `Analyses/Simulations/03_Process_Simulation_Results.R` contains all code to produce the tables and graphs from the simulation portion of the manuscript. The resulting artefacts are stored in `Outputs/`. 
 
 ### 4. Final results and figures
-The `Outputs/` subfolder contains all study results.
+The `Outputs/` subfolder contains all study results. We note that the raw, unprocessed results (i.e. raw models) were too large to host on GitHub and hence are provided in the accompanying FigShare repository: INSERT LINK WHEN ACCEPTED.
 - `Outputs/Abundance_Plots` contains the habitat association graphs (Fig. 3, Fig S1-S3 in main report). These are modular and were stitched together as a single graph in powerpoint. It includes both occupancy and abundance plots.
 - `Outputs/LOO Performance Plots` contains the predictive performance graphs as measured by the ELPD (Fig. 4, Fig S5).
 - `Outputs/Main Figures` contains the NRMSE graphs (Fig. 5, Fig S4).
