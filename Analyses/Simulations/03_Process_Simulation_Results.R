@@ -26,25 +26,9 @@ filtered_df <- combined_df %>%
   filter(scenario == 'large') |>
   mutate(threshold = factor(threshold, levels = threshold_order))
 
-# Create the 16-panel figure
-p<-ggplot(filtered_df, aes(x = models, y = vs_accuracy)) +
-  geom_boxplot() +
-  facet_grid(rows = vars(threshold), cols = vars(species)) +
-  theme_minimal() +
-  labs(x = "Models", y = "Accuracy", title = "Model Accuracy by Species and Threshold") +
-  theme(panel.border = element_rect(color = "black", fill = NA, linewidth = 1))  # Rotate x-axis labels
-
-# Print the plot
-print(p)
-
-pdf("/Users/sassen/Desktop/SimResults.pdf", width=10, height = 10)
-print(p)
-dev.off()
 
 # Rank plots
 
-
-# Assuming your data is in a data frame called 'df'
 vs_result <- combined_df |> 
   filter(scenario == 'large') |>
 #  filter(threshold != 'linear') |>
@@ -98,9 +82,14 @@ dev.off()
 
 pdf("/Users/sassen/OccuGAM_Methods_ECL/Outputs/Simulations/SimResults_es.pdf", width=10, height = 5)
 
+es_result <- es_result %>%
+  mutate(threshold_label = factor(threshold, levels = unique(threshold),
+                                  labels = paste0("True shape: ", unique(threshold))))
+
+
 ggplot(data = es_result, aes(x = rank, y = models, fill = models)) +
   geom_violin(bw = 0.25) +
-  facet_wrap(~threshold) +
+  facet_wrap(~threshold_label) +
   #geom_jitter(width = 0.1, height = 0.1, alpha = 0.1, size = 0.1) +
   stat_summary(
     fun = mean,

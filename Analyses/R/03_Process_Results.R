@@ -4,7 +4,7 @@
 
 # GAMs for Wildlife
 # 10/11/2024
-# J.M. Sassen
+
 
 # Packages
 library(data.table)

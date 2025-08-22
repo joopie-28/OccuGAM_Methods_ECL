@@ -1,8 +1,8 @@
-# OccuGAMs: Evaluating the performance of GAMs and polynomial approaches to nonlinear occupancy modelling when detection is imperfect
+# OccuGAMs: non-linear occupancy and abundance modelling with imperfect detection
 
 ![screenshot](Imagery/HeaderImage.png)
 
-## Last updated: June 30th, 2025
+## Last updated: August 22nd, 2025
 
 [![GitHub Pages](https://img.shields.io/badge/GitHub-Pages-blue?logo=github)](https://github.com/joopie-28/OccuGAM_Methods_ECL)
 
@@ -20,7 +20,6 @@ The repository contains 2 types of scripts:
 
 The camera trap data used in this analysis was prepared using a multi-step data cleaning pipeline that is backed up on GitHub but is currently private due to data-sharing agreements with our collaborators. The dataset provided in this repository has been de-identified, with all latitude and longitude coordinates removed to protect sampling locations.
 
-To learn more about this camera trap data standardization pipeline, please contact Zachary Amir or Matthew Luskin to request access to the Asian Capture Histories GitHub Repository.
 
 ## **Repository Structure**
 
