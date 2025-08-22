@@ -44,7 +44,7 @@ Visualising of results was performed on a local device and required extracting t
 - `Analyses/Simulations/03_Process_Simulation_Results.R` contains all code to produce the tables and graphs from the simulation portion of the manuscript. The resulting artefacts are stored in `Outputs/`. 
 
 ### 4. Final results and figures
-The `Outputs/` subfolder contains all study results. We note that the raw, unprocessed results (i.e. raw models) were too large to host on GitHub and hence are provided in the accompanying FigShare repository: INSERT LINK WHEN ACCEPTED.
+The `Outputs/` subfolder contains all study results. We note that the raw, unprocessed results (i.e. raw models) were too large to host on GitHub and hence are provided in the accompanying FigShare repository: (https://figshare.com/projects/OccuGAMs_non-linear_occupancy_and_abundance_modelling_with_imperfect_detection/254597).
 - `Outputs/Abundance_Plots` contains the habitat association graphs (Fig. 3, Fig S1-S3 in main report). These are modular and were stitched together as a single graph in powerpoint. It includes both occupancy and abundance plots.
 - `Outputs/LOO Performance Plots` contains the predictive performance graphs as measured by the ELPD (Fig. 4, Fig S5).
 - `Outputs/Main Figures` contains the NRMSE graphs (Fig. 5, Fig S4).
